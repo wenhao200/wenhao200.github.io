@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 技术框架与投资分析 | 王文昊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #fafaf9; --bg-alt: #f5f5f4; --bg-card: #ffffff;
+      --text: #1c1917; --text-secondary: #78716c; --text-tertiary: #a8a29e;
+      --accent: #b45309; --accent-light: #fbbf24;
+      --border: #e7e5e4; --radius: 16px; --radius-sm: 10px;
+      --font: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --max-width: 720px;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.8; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    /* Nav */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 2rem; height: 64px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(250,250,249,0.85); backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); }
+    nav .logo { font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; }
+    nav .nav-links { display: flex; gap: 2rem; list-style: none; }
+    nav .nav-links a { font-size: 0.85rem; color: var(--text-secondary); transition: color 0.2s; }
+    nav .nav-links a:hover { color: var(--text); }
+    /* Article */
+    .article-page { padding: 100px 0 4rem; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
+    .article-meta { margin-bottom: 2rem; }
+    .article-meta .label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-tertiary); margin-bottom: 0.5rem; }
+    .article-meta h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .article-meta time { font-size: 0.85rem; color: var(--text-tertiary); }
+    .article-cover { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .article-cover img { width: 100%; display: block; }
+    .article-body { font-size: 1rem; line-height: 1.9; color: var(--text); }
+    .article-body h1, .article-body h2, .article-body h3, .article-body h4 { margin-top: 2rem; margin-bottom: 1rem; font-weight: 600; line-height: 1.3; }
+    .article-body h2 { font-size: 1.4rem; }
+    .article-body h3 { font-size: 1.15rem; }
+    .article-body p { margin-bottom: 1.2rem; }
+    .article-body blockquote { border-left: 3px solid var(--accent); padding: 0.5rem 1rem; margin: 1rem 0; background: rgba(180,83,9,0.04); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    .article-body code { background: var(--bg-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+    .article-body hr { border: none; height: 1px; background: var(--border); margin: 2rem 0; }
+    .article-body ul, .article-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    .article-body li { margin-bottom: 0.4rem; }
+    .article-body mark { background: rgba(180,83,9,0.15); color: var(--accent); padding: 0.1rem 0.3rem; border-radius: 3px; }
+    .article-body strong { font-weight: 600; }
+    .article-body img { max-width: 100%; border-radius: var(--radius-sm); margin: 1rem 0; }
+    .article-body a { color: var(--accent); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    .article-body a:hover { border-bottom-color: var(--accent); }
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 2rem; font-size: 0.9rem; color: var(--text-secondary); transition: color 0.2s; }
+    .back-link:hover { color: var(--accent); }
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text-tertiary); font-size: 0.78rem; }
+    @media (max-width: 768px) {
+      nav .nav-links { display: none; }
+      .article-page { padding: 80px 0 3rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">W.W.H</div>
+    <ul class="nav-links">
+      <li><a href="./index.html#experience">经历</a></li>
+      <li><a href="./index.html#works">作品</a></li>
+      <li><a href="./index.html#articles">文章</a></li>
+      <li><a href="./index.html#contact">联系</a></li>
+    </ul>
+  </nav>
+  <article class="article-page">
+    <div class="article-container">
+      <div class="article-meta">
+        <div class="label">Article</div>
+        <h1>Agent 技术框架与投资分析</h1>
+        <time>2025-04</time>
+      </div>
+      
+      <div class="article-body">
+        <blockquote>[!note] 旨在解决的问题</blockquote>
+- Agent 的分析框架：从底层技术出发，不同 agent 只是<strong>有限技术的不同组合</strong>。
+	- 搞清楚这一点，我们在看到新的 agent 项目时，就能迅速判断他到底做了哪些工作。
+- Agent 的核心技术和能力边界在哪？做到了哪些原来不能做的，还有哪些是短时间做不到的？
+- Agent 能力的底层锚定物是什么？业务理解？数据？工程师团队？——发掘潜力企业，or 互联网大厂？
+- Agent 在未来的技术拐点有哪些？要关注哪些信号点。
+
+
+
+<h1>前言 ： 关于 Agent 的研究思路</h1>
+
+目前市面上自称“Agent”的产品很多，不同的人对 Agent 的定义都略有不同。一部分人认为能采取行动的、给大模型外挂了知识库和工具的就可以叫 agent。
+
+
+
+
+一部分人认为只有能够自主执行任务并根据过程中反馈自主解决问题的才能叫做 agent。这也是 agent 这个词的原意，也就是"自主性"。
+
+
+
+其实二者的差别仅在于技术水平。我认为未来我们对 agent 的定义肯定也是不断变化和门槛提高的，这就好比我们对人工智能的定义的变化：曾经的 NLP、计算机视觉、自动化都被认为是人工智能，但是大语言出来后，曾经的一些智能看起来就差点意思。
+
+所以 agent 作为一个动态变化的概念，没办法直接讨论，更值得关注的是组成 agent 的技术<mark>：我们可以通过哪些外在手段拓展模型的能力边界。不同类型和技术成熟度的外在手段的组合，得到不同形态的 agent 产品。</mark>层出不穷、千差万别的 agent 底层实际上是有限的几个技术的进步与变化。
+
+比如根据外挂等知识库和工具使用的不同，分为了：
+- coding agent：业务代码数据库（知识库）+IDE 运行、修改工具（工具调用）
+- 客服 agent ：商品、话术资料（知识库）+微信聊天窗调用 or 语音工具（工具调用）
+- 教育 agent：题库（知识库）+相机调用、图片识别（工具调用）
+- 工业 agent：图纸库、机器操作（知识库）+机器指令的调用
+- 专利 agent：专利库（知识库）+交互类工具
+- 算命 agent：星象、塔罗、生辰八字（知识库）+算命程序的调用
+- PPT agent：PPT 模版知识库+PPT 接口调用
+
+如果一项项单独做研究，一个是纷繁复杂，其次是时效性差，技术稍微改变和进步就会对原有结论产生冲击。<mark>所以接下来我们从底层技术的角度，来研究 agent。</mark>
+
+关于Agent 技术，之前MetaGPT 发布了一篇很火的超长综述《Advances and Challenges in Foundation Agents: From Brain-Inspired Intelligence to Evolutionary, Collaborative, and Safe Systems》，主要是从学术的角度探讨未来的 agent 应该是什么样的。展望的是一个通用的、能够自进化、自组织的、AGI 的接近终极阶段的 agent 和多 agent 系统。（某种意义上说是科幻级，因为描述的是造一个和真实人类相当甚至超越人类的 agent）。
+
+
+
+所以，其说是一份详尽的技术综述，不如说是一份高瞻远瞩的研究议程 (Research Agenda)，其描述的至少是 L5 级的 agent。与当下的业界技术实力和商业实践相差有点远。短期内对我们的项目判断有限。
+
+<mark>所以进一步细化，接下来我们主要还是从立足于中短期的 L 3、L 4 级智能体的技术范畴进行研究与讨论 agent 的能力边界。</mark>
+
+
+
+<blockquote>我们需要外在手段提升模型能力，是因为模型本身具有局限。这些局限可以总结为：</blockquote>
+- 缺乏知识更新能力：知识库、搜索
+- 幻觉：思维链、多 agent 交叉验证、工作流、知识库
+- 输出结果单一：各种工具调用
+- 上下文本长度：记忆问题
+
+Agent 即是解决模型本身局限的系统性方案集合。
+
+<h1>当前Agent 的能力与技术</h1>
+
+
+
+<blockquote> 目前的 agent 的核心技术，可以归结为下面四个点：</blockquote>
+- 知识与记忆
+- 工具调用
+- 规划反思决策（分歧大）
+- 多 agent 协作（最不成熟）
+<blockquote>以上四个技术按成熟度递进，最原始的 agent （Coze）主要用了前两个，munus 用了前三个，深度赋智用了四个。</blockquote>
+
+<h2>关键技术 1：知识与记忆</h2>
+
+解决的问题：
+- <strong>大模型缺乏实时知识更新的能力</strong>。
+- <strong>行业私域知识没有被训到模型里</strong>。例如，在景区场景中，有些景区的内部知识（如售票时间、每日游玩路线安排、开放与关闭的景点信息等）是通用大语言模型无法预先掌握的。
+- <strong>用户的交互产生的数据无法被很好利用</strong>。比如偏好、口头指令。
+
+前面两种主要通过知识库，最后一个更多属于记忆。但本质上都属于让大模型知道得更多。
+
+<h3>知识：知识库（RAG ）和搜索</h3>
+<mark>这一部分应该算是技术上分歧比较小的</mark>
+
+知识库的核心技术就是  即检索增强生成（Retrieval-Augmented Generation）。通过构建和集成行业私域知识库，AI Agent 就可以弥补大语言模型在实时性和领域专属知识方面的不足，显著提升其在特定场景中的适用性和理解能力。
+
+
+
+搜索和知识库放一起，是因为，搜索从技术上讲是一种 tool use，但从结果上讲是一种知识库。<mark>个人认为搜索可以理解成一个公开的知识库</mark>，只不过由于数据量级的不同，技术实现上和 RAG 不一样。
+
+| 搜索    | 知识库     | 交互记忆  |
+| ----- | ------- | ----- |
+| 人类的知识 | 私有领域的知识 | 个人的知识 |
+| 很成熟   | 较成熟     | 探索阶段  |
+发展趋势：<mark>个性化、定制化、私有化</mark>。在知识库做得差不多之后，下一步肯定是卷交互记忆。
+
+<h3>记忆：前沿算法探索</h3>
+
+问题：
+ - 多轮对话之后遗忘前面的指令和内容。长上下文文本问题（历史对话不能很好的回顾）
+ - 哪些信息应该被大模型写入记忆，选择性遗忘。
+
+<blockquote>  架构的自注意力机制在处理长度为 $L$ 的序列时，计算复杂度为 $O(L^2)$，导致显存占用和延迟呈指数级增长。以 4096 token 的上下文为例，注意力矩阵需要存储 16.7 M 个权重值，当扩展到 100 万 token 时，矩阵规模将达 1 万亿参数，远超现有 GPU 显存容量。这种计算特性迫使模型在长文本处理时不得不采用<strong>截断策略</strong>，造成关键信息的丢失。—— </blockquote>
+
+但是目前对记忆的研究和解决方案还没有一个主流的结论。短期记忆（基于 context 的记忆，即作为 prompt）、长期记忆（无限召回历史信息的能力）与工作记忆等不同类型，包含情景记忆、语义记忆和程序记忆等细分领域。高效的记忆检索、存储、遗忘和泛化机制对于 Agent 至关重要。
+
+<h3>单独作为产品的知识库</h3>
+
+知识库技术（RAG）上本身并不难，目前市面上已经有很多知识库产品了，<mark>核心竞争要素为数据与交互</mark>，to C 比较重交互、to B 则重行业数据。
+
+| 秘塔                                       | Ima                                            |
+| :--------------------------------------- | :--------------------------------------------- |
+|      | <br> |
+| Farbata （企业知识中台）                         | GPT “项目模式”                                     |
+|      | <br>       |
+| 火山知识库                                    | 飞书知识库                                          |
+| <br> |            |
+To C 领域的单独产品的知识库可能没有什么机会。因为模厂的 Chatbox 也可以直接加知识库功能，比如 GPT 的项目功能。飞书也在做知识库。从使用个性化、私有化、方便程度、和团队协作上说，秘塔是非常不占优势的。甚至未来的操作系统可能就带知识库功能，笔记软件比如 notion，比如 obsidian，办公协作软件飞书，从 ToC 的使用体验上会比秘塔方便。To B 的知识库如果有独特的数据库 （比如 wind 这种、专利撰写、军事情报）还是会有一定机会。
+
+（搜索、知识库功能，一旦模厂大厂开始做了之后，初创就没什么机会了）
+
+
+但做好知识库是有助于做 agent，秘塔类的企业，未来的出路也会是在往 agent 上走（秘塔也整合了很多私有的研报法律领域的数据，但知识库没有很方便地做搜索）。做好知识库的潜力，我们已经逐渐看到了，秘塔加一个前端代码的撰写就是一个互动网页生成 agent，这个工具更近一步，就是一个教育阅读 agent。PS：秘塔有机会去聊吗？
+
+（纳米也可以生成动态网页了）
+![图片](https://mmbiz.qpic.cn/sz_mmbiz_gif/KmXPKA19gW82hAwM8B4wBTEG64WDp5r03pu4EP64lXQbiaUYc2dRWEKraWjecuRib3YZROZ01Eh4jIiadasbBvbSA/640?wx_fmt=gif&from=appmsg&tp=wxpic&wxfrom=5&wx_lazy=1)
+
+
+<h2>关键技术 2：工具调用</h2>
+
+
+
+<h3>哪些 tool 简单，哪些 tool 难</h3>
+
+工具，大致可以分为 image、video、audio、text 这四类。目前市面上最多的是 text 这一类（比如查询时间地点、访问网站、生成网页本身也是 coding）。
+
+
+
+不同类别的工具的实现难度是不同的，这个问题<mark>直接关系 agent到在不同行业的落地。</mark>总的来说，多模态（image、video、audio）的难，text （查询、读写）的简单。
+
+Text< image < audio< video。主要是目前推理仅在文字和图像领域实现了。语音和视频还没有出现推理模型。
+
+所以，个人判断：
+- 客服销售类 agent、coding、research 类只涉及到文字工作的 agent 会率先落地。
+- 教育类（图像搜题解题）会次之。
+
+| Coze 空间目前支持的 MCP                     |                                      | 纳米的 MCP 目前也主要是搜索、查询类                 |
+| ------------------------------------ | ------------------------------------ | ------------------------------------ |
+|  |  |  |
+<h3>工具的实现： </h3>
+
+MCP（Model Context Protocol，模型上下文协议）由 Anthropic 公司于 2024 年 11 月首次提出并开源。旨在提供一个安全、标准、双向的通道，让 AI 模型可以像人一样自由调动外部知识库和工具库。
+
+一句话解释，MCP 就是 Function Call 的成熟版，企业版，标准化版。在工具的能力上并没有提升，但降低了工具的使用门槛，和 agent 的开发门槛。
+
+| Function call                                                                                            | MCP                                                                                                   |
+| -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|                                                                 |                                                              |
+| - 代码量大（详细的函数定义）<br>- 开发门槛高（支持高并发与容错）<br>- 不能复用，重复开发<br>- 一般大模型和工具在同一台服务器上。同步，程序会一直等待函数执行完返回结果，才继续执行后续代码； | - MCP 服务端和大模型客户端分离。异步的，发送请求后程序不会等待结果，会继续执行其他代码，等结果出来再处理。<br>- 可以直接调用别人的 MCP。不需要重复开发<br>- 不是每次另写一套集成方案 |
+|                                                                                                          | Function call 和 MCP 是可以混用的。                                                                           |
+
+目前可以说MCP 初步的生态成功：许多开发者尝鲜建构了 MCP Server 和客户端库。
+
+总体来看，MCP 在技术上填补了模型与工具互动的空白，并通过开源抢占了先机，但其未来能否统一标准，取决于行业巨头和社区的博弈。乐观的话，大家认可其开放价值，共建生态，让 MCP 真正成为 AI 时代的“USB 通用界面”；悲观的话，可能会出现多个变体标准割据，或者被巨头用其它方案取代。然而无论如何，MCP 所代表的理念——让大模型直连外部世界——必将持续下去，并深刻影响 AI 应用的形态。
+
+
+<blockquote>这一部分接下来的研究方向可以对各种工具的成熟度，大致实现什么样的一个效果做一个梳理。资料可以从各类 agent 开发平台和一些开发项目里去做 mapping。</blockquote>
+
+<h2>关键技术 3：规划、反思、决策</h2>
+
+<mark>这一部分应该是目前技术分歧最大的一块。</mark>
+<h3>大模型派（Big Model）和工作流派（Big Workflow）之争</h3>
+
+https://mp.weixin.qq.com/s/iTvrXLMxskcCWoFAGj-Umw
+
+1、 基于人类反馈强化学习（）的大模型派：Deep research
+
+
+人类反馈强化学习（RLHF）通过人工标注错误样本迭代训练来弥补模型因果性与业务逻辑理解的缺陷，<mark>本质是通过<strong>人类偏好引导的概率修正机制</strong>实现“因果模拟”。</mark>
+   • <strong>错误样本标注</strong>：将开发者修正后的代码标记为“正样本”，原始错误输出标记为“负样本”，构建偏好数据集
+   • <strong>奖励模型训练</strong>：基于对比学习（如 Pairwise Ranking）训练奖励模型，使其能区分符合业务逻辑的代码（高奖励值）与存在潜在缺陷的代码（低奖励值）
+   • <strong>策略梯度优化</strong>：通过 PPO 算法调整模型参数，使得生成代码的 token 分布向高奖励区域偏移
+
+但由于其仍是数据驱动和黑箱本质，这种路径虽上限高，但下限低。主要还是强化学习这个范式潜力很大。Open AI 表示过「该模型通过强化学习，自主掌握了核心的网页浏览能力（比如搜索、点击、滚动、理解文件）……它还能自主推理，通过大量网站的信息合成，直接找到特定的内容或生成详细的报告。」，还有通过强化学习让电脑学会玩 MC 的。
+
+2、 基于工作流决策的工作流派：。工作流本身也是一种决策树。
+
+
+
+目前最常见，成本也最低，开发门槛也最低的一种。同时也能很好的承接传统 RPA 的积累。（比如浏览网页、点击、评论、发朋友圈这类的操作以前都是通过 RPA 完成的，没必要单独训练一个强化学习）
+
+
+
+
+
+
+- <mark>类比人类的工作模式，SOP 总是对效率是有正向帮助的。所以工作流应该不会被淘汰，规则框架肯定是有效的。</mark>
+- 大多数的「Agentic 系统」都是 Workflows 和 Agents 的结合。理想的 Agent 框架应该允许从「结构化工作流」逐步过渡到「由模型驱动」，并在两者之间灵活切换。
+<h3>奖励与情绪驱动的决策</h3>
+类似人类会受情绪驱动决策。
+
+<h2>关键技术 4:多 Agent 协作与A2A</h2>
+
+<mark>是目前最不成熟的技术</mark>
+
+核心思想：人类可以通过协作实现 1+1>1，agent 也可以通过将任务分配给不同专长的 agent 来提高效率。但目前市场上应用情况并不多，原因在于目前 agent 用于解决的任务还没有涉及如智慧城市管理、大型项目开发等复杂环境。
+
+
+
+四种典型通信结构: 分层 (Layered) 、去中心化 (Decentralized) 、集中化 (Centralized) 和共享消息池 (Shared Message Pool)
+- 分层通信是按层次结构组织的，每个层级的智能体具有不同的角色，主要在其层级内部或与相邻层级交互。（复杂项目开发）
+- 去中心化通信基于点对点网络，智能体直接相互通信，这种结构通常用于世界模拟应用。（军事推演、无人机协同）
+- 集中化通信涉及一个或一组中央智能体协调系统的通信，其他智能体主要通过这个中心节点进行交互。（工业 agent）
+- 共享消息池是一种通过维护一个智能体可以发布和订阅消息的共享池来提高通信效率的结构。（项目开发）
+
+
+
+<h3>Multi-agent 当下并不紧迫，短期内仍是单 agent 占优</h3>
+https://mp.weixin.qq.com/s/AQ0DfxTY3rR0Y0qBoJO7nw
+
+<mark>虽然理论上多 agent 的上限更高，但是现在的技术水平还不足以稳定实现 1+1>1，更不用提成本也会大幅上升。</mark>这是因为多智能体之间的互动效率较低，做好很难。以多智能体写代码为例，用户需要写一个简单的游戏，系统中有<strong>老板、产品和程序员</strong>的角色，但在系统实际运转的时候，智能体<strong>大部分时间都在讨论没有意义的内容</strong>，最终代码完成度也非常一般，很<strong>消耗资源</strong>。
+
+虽然可以避免幻觉，但是不同 agent 传递之后会损失细节。<strong>甚至在很多任务上都会失败，还不如单智能体的模式</strong>，成本上也比工作流和规则驱动要高。
+
+很考验技术，不同企业、不同任务的成功率差别极其大。
+
+
+
+<strong>第一类是流程规划或角色分工类的问题</strong>。包含流程设计，角色定义，任务划分等，主要问题在规划/分工模糊。目前 Multi-agent 方案中，有些是固定的任务流程，有的是通过一个 planner 来做任务规划和角色分工，后者是比较普遍的解决方案，在单 Agent 任务规划中很常见。不完整或模棱两可的指令通常会引起任务失败，其次是在数据严谨的场景中，逻辑错误也会导致无法满足任务原始要求。
+
+<strong>第二类是智能体之间的协作问题</strong>，主要涉及两大难点：
+1）智能体之间的互动效率较低
+以多智能体写代码为例，用户需要写一个简单的游戏，系统中有老板、产品和程序员的角色，但在系统实际运转的时候，智能体大部分时间都在讨论没有意义的内容，最终代码完成度也非常一般，很消耗资源。
+2）在交互过程中会忽略关键信息
+比如 A 智能体让 B 智能体在去总结一篇文章，总结出来的内容可能是丢去一些细节的，但是这个细节又会对整个任务极为重要。
+
+<strong>第三类是任务验证和终止类的问题</strong>，系统按照用户的要求把任务做出来了，但是怎么验证任务做的怎么样，很多系统是没有这样的验证机制的，要么有验证机制也不怎么有用，或者是任务还没有做完就结束了。
+
+
+
+
+但也有一些解决方法，如下图。<mark>总的来说，多 agent 协作还是有待探索。</mark>同时，Multi-Agent 其实不应该模仿人的协作分工的方式。人需要协作，一方面是为了专业化的分工，每个人可以发挥自己的长处，另一方面也是为了任务并行，人多做事会快一些。但这两点在大模型身上都不是很明显，大模型的能力也一直往通用化的方向在走，如果只是任务类型的不同，这种情况还不如把任务都塞到一个 Agent 里。
+
+
+<h3>关于 A2A 的未来</h3>
+https://mp.weixin.qq.com/s/JB6F9LZtGh_e0J1V0ZEtYw
+
+Agent 2 Agent（A2A）协议由 Google 主导开发，定位为跨平台、跨厂商的 AI 智能体对话标准。它让不同来源的智能体彼此“加好友”，实现安全通讯、资讯交换与协同行动。
+
+A2A 协议与上面的多 agent 有点不一样，和 MCP 一样采用的是客户端-服务端架构（Client-ServerModel）。A2A 中包含三个核心的参与者：
+- User
+- Client Agent
+- Remote Agent
+
+
+Client 和 Server 之间的通信，可以理解为就是一个个简单的请求和结果的响应，只不过这个请求是一个个的任务。一个 Agent 既可以是 Client 也可以是 Server。
+
+从功能划分上看，MCP 主攻“Agent 与工具/资源通讯”，A2A 专注“Agent 与 Agent 通讯”。
+
+
+
+但从当前的效果上看，MCP (anthropic) 和 A2A（google） 有点类似，都是把一部分工作外包；
+
+<mark>但目前有的人认为这种泾渭分明的划分在实践中未必站得住。</mark>
+例如，Agent 与 Tool 的界限正在变模糊：工具变得越来越智能，某种程度上可以看做是“哑代理”；而许多代理的作用其实就是提供某种工具服务。
+
+举例来说，一个负责翻译的 Agent，从另一 Agent 视角看，它其实就是一个工具（提供翻译 API）。如果已有 A 2 A，完全可以通过 A 2 A 与一个专门翻译 Agent 对话达成翻译目的，而不一定非要通过 MCP 去调一个翻译 API 工具。反过来，像 AutoGPT 那样的系统中，多个子代理之间协作也可以通过把彼此当作工具（函数呼叫）来实现。
+
+<mark>如果一个标准既能描述 Agent 通讯又能描述工具呼叫，那开发者可能更倾向于用一种协议解决问题，不会维护两套。还有比如 OpenAI 的 Agent as tools。</mark>Solomon Hykes（前 Docker CEO）就对此评论：“理论上它们能共存，但实际上我预见会有拉锯。开发者的精力有限，不会同时投入多个生态”。
+
+PS：
+- 可以了解一下驯鹿（superagent）、MGX（）等企业的单任务tokens 消耗量的多少
+- 看一下各家企业的探索、提的框架具体有什么不同
+<h2>以上技术的锚定物是什么？</h2>
+
+- 知识库 - 数据、行业 Know How
+- 记忆- 算法团队
+- 工具调用- 工程团队
+- 决策反思 - 数据（强化学习需要人类标注）、业务理解
+- 多 agent 协作：短期是算法和业务理解、长期是业务理解、行业 Know How
+
+<mark>垂直行业类 agent 初创企业有机会。工具类 agent 大厂胜算更大。</mark>
+
+<h1>未来的Agent 如何更进一步</h1>
+
+正如之前白杨的 CTO 说的，科学的进步是跳跃的，工程的进步是渐进的。模型的推理这一科学突破的诞生，让当前 agent 成为可能。未来会对 agent 范式产生巨大改变的，我觉得需要关注下面几个方向的科学突破。
+
+<h2> 记忆系统 (Memory System)</h2>
+记忆是智能的基础。当前的智能体往往只有有限的短期记忆（如 Prompt 中的上下文）或简单的外部向量数据库。Foundation Agent 则需要一个更复杂、更接近生物体的多层次记忆系统。论文探讨了短期记忆、长期记忆与工作记忆等不同类型，包含情景记忆、语义记忆和程序记忆等细分领域。高效的记忆检索、存储、遗忘和泛化机制对于 Foundation Agent 至关重要。如何设计能够支持持续学习、避免灾难性遗忘，并能高效检索相关信息的记忆系统，是一个核心挑战。
+
+![图片](https://mmbiz.qpic.cn/sz_mmbiz_png/KmXPKA19gW9I2ibzpMAlKCOwe2zDbrut7D2VesdBZ8rc6TelXu7mibwmojMB6fu8rRZfwUrrZUrmk3icUBOa5lAxw/640?wx_fmt=png&from=appmsg&tp=wxpic&wxfrom=5&wx_lazy=1&wx_co=1)
+<h2>世界模型 (World Model)</h2>
+
+<mark>智能体需要理解其所处的环境以及自身行为可能产生的后果。</mark>世界模型正是对环境动态的内部表征。它可以帮助智能体进行预测（如果我采取行动 A，会发生什么？）、规划（为了达到目标 B，我应该采取什么行动序列？）和反事实推理（如果当初采取了不同的行动，结果会怎样？）。一个强大的世界模型需要能够处理物理规律、社会规范、其他智能体的行为等多方面信息，并且能够根据新的观测数据不断更新和完善。构建准确、高效且可泛化的世界模型是实现高级智能的关键一步。
+
+<h2>感知系统 (Perception System)&多模态推理</h2>
+
+智能体需要通过感知系统从环境中获取信息。<mark>这不仅仅是处理文本，更包括视觉、听觉、触觉等多模态信息的输入和理解。</mark>感知系统需要能够从原始感官数据中提取有意义的特征，识别对象、理解场景，并将这些信息传递给认知核心和记忆系统。多模态融合、实时处理以及对噪声和不确定性的鲁棒性是感知系统面临的主要挑战。
+
+
+# 
+
+
+<h1>部分Reference</h1>
+
+https://mp.weixin.qq.com/s/TQGg8fFN2ZUOp9PDrpuZyQ
+
+https://pdf.dfcfw.com/pdf/H3_AP202503131644339445_1.pdf?1741889983000.pdf
+
+https://mp.weixin.qq.com/s/JB6F9LZtGh_e0J1V0ZEtYw
+
+https://mp.weixin.qq.com/s/iTvrXLMxskcCWoFAGj-Umw
+
+      </div>
+      <a href="./index.html#articles" class="back-link">← 返回文章列表</a>
+    </div>
+  </article>
+  <footer>
+    <p>© 2025 王文昊 · Built with HTML, CSS & JavaScript</p>
+  </footer>
+</body>
+</html>

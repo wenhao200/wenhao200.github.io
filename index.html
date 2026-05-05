@@ -4,537 +4,617 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>王文昊 | 产品经理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== Reset & Base ===== */
+    /* ===== Reset ===== */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #0a0a0f;
-      --bg-card: #12121a;
-      --bg-card-hover: #1a1a28;
-      --text: #e0e0e8;
-      --text-dim: #8888a0;
-      --accent: #6c63ff;
-      --accent-glow: rgba(108, 99, 255, 0.3);
-      --green: #00d4aa;
-      --green-glow: rgba(0, 212, 170, 0.2);
-      --border: #1e1e2e;
-      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      --bg: #fafaf9;
+      --bg-alt: #f5f5f4;
+      --bg-card: #ffffff;
+      --text: #1c1917;
+      --text-secondary: #78716c;
+      --text-tertiary: #a8a29e;
+      --accent: #b45309;
+      --accent-light: #fbbf24;
+      --border: #e7e5e4;
+      --border-light: #f5f5f4;
+      --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.04);
+      --shadow-md: 0 4px 16px rgba(28, 25, 23, 0.06);
+      --shadow-lg: 0 12px 40px rgba(28, 25, 23, 0.08);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --font: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --max-width: 1080px;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
       font-family: var(--font);
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
 
-    /* ===== Navigation ===== */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(10, 10, 15, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex; justify-content: space-between; align-items: center;
-      height: 60px;
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== Cursor Glow ===== */
+    .cursor-glow {
+      position: fixed; top: 0; left: 0;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(180, 83, 9, 0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+      will-change: transform;
     }
+    @media (max-width: 768px) { .cursor-glow { display: none; } }
+
+    /* ===== Scroll Progress ===== */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: var(--accent); z-index: 200;
+      width: 0; transition: width 0.05s linear;
+    }
+
+    /* ===== Nav ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(250, 250, 249, 0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 1px 0 var(--border); }
 
     nav .logo {
-      font-size: 1.1rem; font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 1px;
+      font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.5px; color: var(--text);
+      position: relative;
+    }
+    nav .logo::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1.5px; background: var(--accent);
+      transition: width 0.3s;
+    }
+    nav .logo:hover::after { width: 100%; }
+
+    nav .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    nav .nav-links a {
+      font-size: 0.85rem; color: var(--text-secondary);
+      font-weight: 400; transition: color 0.2s;
+      position: relative; padding-bottom: 4px;
+    }
+    nav .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1.5px; background: var(--accent);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    nav .nav-links a:hover { color: var(--text); }
+    nav .nav-links a:hover::after { width: 100%; }
+
+    /* ===== Layout ===== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative; z-index: 1;
     }
 
-    nav .nav-links { display: flex; gap: 2rem; list-style: none; }
-    nav .nav-links a {
-      color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
-      transition: color 0.3s;
+    section { padding: 7rem 0; }
+
+    .section-header { margin-bottom: 3rem; }
+    .section-header h2 {
+      font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--text-tertiary); margin-bottom: 0.75rem;
     }
-    nav .nav-links a:hover { color: var(--accent); }
+    .section-header p {
+      font-size: 1.75rem; font-weight: 600;
+      line-height: 1.3; color: var(--text);
+    }
 
     /* ===== Hero ===== */
     .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-      position: relative;
-      overflow: hidden;
+      min-height: 100vh; display: flex; align-items: center;
+      padding-top: 64px;
     }
-
-    .hero::before {
-      content: '';
-      position: absolute; top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: radial-gradient(circle at 30% 40%, var(--accent-glow) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 60%, var(--green-glow) 0%, transparent 50%);
-      animation: bgFloat 20s ease-in-out infinite alternate;
+    .hero .container {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
     }
+    .hero-text { max-width: 520px; }
 
-    @keyframes bgFloat {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      100% { transform: translate(30px, -30px) rotate(3deg); }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; font-weight: 500; color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0; transform: translateY(20px);
     }
-
-    .hero-content { position: relative; z-index: 1; }
-
-    .hero .greeting {
-      font-size: 1.1rem; color: var(--accent);
-      letter-spacing: 3px; text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
+    .hero-label.animate { animation: fadeUp 0.6s 0.2s forwards; }
 
     .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 800;
-      line-height: 1.15;
+      font-size: clamp(2.8rem, 5vw, 3.5rem);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.03em;
       margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--green) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      min-height: 4rem;
     }
-
-    .hero .subtitle {
-      font-size: 1.25rem; color: var(--text-dim);
-      max-width: 600px; margin: 0 auto 2.5rem;
-    }
-
-    .hero .tags {
-      display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;
-      margin-bottom: 2.5rem;
-    }
-
-    .hero .tag {
-      padding: 0.4rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      transition: all 0.3s;
-    }
-    .hero .tag:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-
-    .hero .cta {
-      display: inline-flex; gap: 1rem;
-    }
-
-    .btn {
+    .hero h1 .char {
       display: inline-block;
-      padding: 0.75rem 2rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: all 0.3s;
-      cursor: pointer;
-      border: none;
+      opacity: 0; transform: translateY(30px);
+    }
+    .hero h1 .char.animate {
+      animation: charReveal 0.5s forwards;
+    }
+    .hero h1 span.accent { color: var(--accent); }
+
+    .hero .desc {
+      font-size: 1.05rem; color: var(--text-secondary);
+      line-height: 1.8; margin-bottom: 2rem;
+      opacity: 0; transform: translateY(20px);
+    }
+    .hero .desc.animate { animation: fadeUp 0.6s 1.4s forwards; }
+
+    .hero-btns {
+      display: flex; gap: 0.75rem;
+      opacity: 0; transform: translateY(20px);
+    }
+    .hero-btns.animate { animation: fadeUp 0.6s 1.6s forwards; }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      opacity: 0; transform: translateY(20px);
+    }
+    .hero-stats.animate { animation: fadeUp 0.6s 1.8s forwards; }
+
+    .hero-stat .num {
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .hero-stat .label {
+      font-size: 0.78rem; color: var(--text-tertiary); margin-top: 0.15rem;
     }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
+    /* Hero Card */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      perspective: 1000px;
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px var(--accent-glow);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-outline:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* ===== Sections ===== */
-    section {
-      padding: 5rem 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-
-    .section-title .dot {
-      width: 10px; height: 10px;
-      background: var(--accent);
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .section-desc {
-      color: var(--text-dim);
-      margin-bottom: 3rem;
-      font-size: 0.95rem;
-    }
-
-    /* ===== Timeline ===== */
-    .timeline { position: relative; padding-left: 2rem; }
-
-    .timeline::before {
-      content: '';
-      position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, var(--accent), var(--green), transparent);
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 3rem;
-      padding-left: 1.5rem;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute; left: -2rem; top: 8px;
-      width: 12px; height: 12px;
-      background: var(--accent);
-      border-radius: 50%;
-      border: 3px solid var(--bg);
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
-
-    .timeline-item .period {
-      font-size: 0.85rem;
-      color: var(--accent);
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-
-    .timeline-item h3 {
-      font-size: 1.15rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .timeline-item .company {
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .timeline-item ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .timeline-item li {
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-      padding-left: 1.2rem;
-      position: relative;
-    }
-
-    .timeline-item li::before {
-      content: '▸';
-      position: absolute; left: 0;
-      color: var(--accent);
-    }
-
-    .timeline-item li strong {
-      color: var(--text);
-    }
-
-    /* ===== Education ===== */
-    .edu-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .edu-card {
+    .hero-card {
+      width: 100%; max-width: 380px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.3s;
+      opacity: 0; transform: translateY(40px) rotateX(5deg);
+    }
+    .hero-card.animate {
+      animation: cardAppear 0.8s 0.6s forwards;
+    }
+    .hero-card:hover { box-shadow: 0 20px 60px rgba(28, 25, 23, 0.12); }
+    .hero-card-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+    .hero-card-role {
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--accent); background: rgba(180, 83, 9, 0.08);
+      padding: 0.3rem 0.75rem; border-radius: 20px;
+    }
+    .hero-card-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; color: #fff;
+      transform: translateZ(20px);
+    }
+    .hero-card h3 {
+      font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;
+      transform: translateZ(10px);
+    }
+    .hero-card .bio {
+      font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;
+      transform: translateZ(8px);
+    }
+    .hero-card-tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem;
+      transform: translateZ(15px);
+    }
+    .hero-card-tags span {
+      font-size: 0.75rem; padding: 0.3rem 0.7rem;
+      background: var(--bg-alt); border-radius: 6px; color: var(--text-secondary);
+      font-weight: 500; transition: all 0.2s;
+    }
+    .hero-card-tags span:hover {
+      background: var(--border); color: var(--text);
+      transform: translateZ(5px);
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.7rem 1.6rem; border-radius: var(--radius-sm);
+      font-size: 0.88rem; font-weight: 500;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer; border: none;
+      font-family: var(--font);
+      position: relative; overflow: hidden;
+    }
+    .btn-primary {
+      background: var(--text); color: var(--bg);
+    }
+    .btn-primary:hover { background: #292524; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-ghost {
+      background: transparent; color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--text-tertiary); color: var(--text); }
+
+    /* Button ripple */
+    .btn .ripple {
+      position: absolute; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(0); animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+    .btn-ghost .ripple { background: rgba(28, 25, 23, 0.06); }
+
+    /* ===== Marquee ===== */
+    .marquee-section { padding: 3rem 0; overflow: hidden; }
+    .marquee-track {
+      display: flex; gap: 1rem;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    .marquee-item {
+      font-size: 0.82rem; padding: 0.5rem 1.1rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 24px; color: var(--text-secondary);
+      white-space: nowrap; font-weight: 400;
       transition: all 0.3s;
     }
+    .marquee-item:hover {
+      border-color: var(--accent); color: var(--accent);
+      box-shadow: 0 2px 12px rgba(180, 83, 9, 0.08);
+    }
+    .marquee-item .dot {
+      display: inline-block; width: 4px; height: 4px;
+      border-radius: 50%; background: var(--accent);
+      margin-right: 0.5rem; opacity: 0.6;
+    }
 
+    /* ===== Experience ===== */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item {
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border-light);
+      transition: background 0.2s;
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-item:first-child { padding-top: 0; }
+
+    .timeline-meta {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    .timeline-period {
+      font-size: 0.78rem; font-weight: 500; color: var(--accent);
+      white-space: nowrap;
+    }
+    .timeline-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.15rem; }
+    .timeline-company { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem; }
+
+    .timeline-item ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .timeline-item li {
+      font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;
+      padding-left: 1.25rem; position: relative;
+    }
+    .timeline-item li::before {
+      content: ''; position: absolute; left: 0; top: 0.55em;
+      width: 4px; height: 4px; border-radius: 50%; background: var(--text-tertiary);
+      transition: all 0.3s;
+    }
+    .timeline-item li:hover::before {
+      background: var(--accent); box-shadow: 0 0 8px rgba(180, 83, 9, 0.4);
+    }
+    .timeline-item li strong { color: var(--text); font-weight: 500; }
+
+    /* ===== Education ===== */
+    .edu-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+    }
+    .edu-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative; overflow: hidden;
+    }
+    .edu-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .edu-card:hover::before { transform: scaleX(1); }
     .edu-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      border-color: #d6d3d1; box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
     }
-
-    .edu-card .period {
-      font-size: 0.85rem;
+    .edu-period { font-size: 0.78rem; color: var(--accent); font-weight: 500; }
+    .edu-title { font-size: 1.05rem; font-weight: 600; margin: 0.5rem 0 0.25rem; }
+    .edu-detail { font-size: 0.85rem; color: var(--text-secondary); }
+    .edu-highlight {
+      margin-top: 0.75rem; font-size: 0.82rem; font-weight: 500;
       color: var(--accent);
-      font-weight: 600;
     }
 
-    .edu-card h3 {
-      font-size: 1.1rem;
-      margin: 0.3rem 0;
+    .research-section { margin-top: 3.5rem; }
+    .research-section h3 {
+      font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--text-tertiary); margin-bottom: 1.25rem;
     }
+    .research-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .research-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1.25rem 1.5rem;
+      transition: all 0.25s;
+    }
+    .research-item:hover { border-color: #d6d3d1; }
+    .research-item h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .research-item p { font-size: 0.83rem; color: var(--text-secondary); }
 
-    .edu-card .detail {
-      color: var(--text-dim);
-      font-size: 0.9rem;
+    /* ===== Works ===== */
+    .works-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
     }
+    .work-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 800px;
+    }
+    .work-card:hover {
+      border-color: #d6d3d1; box-shadow: var(--shadow-lg);
+    }
+    .work-card .preview {
+      aspect-ratio: 16/10; display: flex;
+      justify-content: center; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .work-card .preview.bg-snake { background: #1c1917; }
+    .work-card .preview.bg-prompt { background: #292524; }
+    .work-card .preview.bg-marketing { background: linear-gradient(135deg, #1c1917 0%, #292524 100%); }
+    .work-card .preview .icon {
+      font-size: 2.5rem;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .work-card:hover .preview .icon { transform: scale(1.15) rotate(-3deg); }
 
-    .edu-card .highlight {
-      margin-top: 0.8rem;
-      font-size: 0.85rem;
-      color: var(--green);
+    .work-card .preview .overlay {
+      position: absolute; inset: 0;
+      background: rgba(28, 25, 23, 0.7);
+      display: flex; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.3s;
+      backdrop-filter: blur(4px);
     }
+    .work-card:hover .overlay { opacity: 1; }
+    .overlay .play-btn {
+      width: 44px; height: 44px; background: #fff;
+      border-radius: 50%; display: flex;
+      justify-content: center; align-items: center;
+      font-size: 0.9rem; color: var(--text);
+      transition: transform 0.2s;
+      box-shadow: var(--shadow-md);
+      transform: scale(0.8);
+    }
+    .work-card:hover .overlay .play-btn { transform: scale(1); }
+    .overlay .play-btn:hover { transform: scale(1.1) !important; }
+
+    .work-card .info { padding: 1.25rem 1.5rem 1.5rem; }
+    .work-card .info h3 {
+      font-size: 0.95rem; font-weight: 600; margin-bottom: 0.35rem;
+    }
+    .work-card .info p {
+      font-size: 0.82rem; color: var(--text-secondary);
+      line-height: 1.65; margin-bottom: 0.9rem;
+    }
+    .work-card .tech {
+      display: flex; gap: 0.35rem; flex-wrap: wrap;
+    }
+    .work-card .tech span {
+      font-size: 0.7rem; padding: 0.2rem 0.55rem;
+      background: var(--bg-alt); border-radius: 5px;
+      color: var(--text-secondary); font-weight: 500;
+      transition: all 0.2s;
+    }
+    .work-card .tech span:hover { background: var(--border); color: var(--text); }
 
     /* ===== Skills ===== */
     .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
     }
-
-    .skill-category {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-    }
-
-    .skill-category h3 {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      color: var(--accent);
-    }
-
-    .skill-tags {
-      display: flex; flex-wrap: wrap; gap: 0.5rem;
-    }
-
-    .skill-tag {
-      padding: 0.3rem 0.8rem;
-      background: rgba(108, 99, 255, 0.1);
-      border: 1px solid rgba(108, 99, 255, 0.2);
-      border-radius: 6px;
-      font-size: 0.85rem;
-      color: var(--text-dim);
+    .skill-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
       transition: all 0.3s;
     }
-
-    .skill-tag:hover {
-      background: rgba(108, 99, 255, 0.2);
+    .skill-card:hover { border-color: #d6d3d1; box-shadow: var(--shadow-sm); }
+    .skill-card h4 {
+      font-size: 0.82rem; font-weight: 600; margin-bottom: 1rem;
       color: var(--text);
-      border-color: var(--accent);
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .skill-tag {
+      font-size: 0.78rem; padding: 0.35rem 0.7rem;
+      background: var(--bg-alt); border-radius: 6px;
+      color: var(--text-secondary); font-weight: 400;
+      transition: all 0.25s;
+      cursor: default;
+    }
+    .skill-tag:hover {
+      background: var(--accent); color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.2);
     }
 
-    /* ===== Projects / Works ===== */
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .work-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: all 0.3s;
-    }
-
-    .work-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .work-card .preview {
-      height: 180px;
-      display: flex; justify-content: center; align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .work-card .preview.snake-preview {
-      background: linear-gradient(135deg, #0f3460, #1a1a2e);
-    }
-
-    .work-card .preview .game-icon {
-      font-size: 4rem;
-    }
-
-    .work-card .preview .play-overlay {
-      position: absolute; inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex; justify-content: center; align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .work-card:hover .play-overlay {
-      opacity: 1;
-    }
-
-    .play-btn {
-      width: 50px; height: 50px;
-      background: var(--accent);
-      border-radius: 50%;
-      display: flex; justify-content: center; align-items: center;
-      font-size: 1.2rem; color: #fff;
-      text-decoration: none;
-      transition: transform 0.3s;
-    }
-    .play-btn:hover { transform: scale(1.1); }
-
-    .work-card .info {
-      padding: 1.25rem;
-    }
-
-    .work-card .info h3 {
-      font-size: 1.05rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .work-card .info p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      margin-bottom: 0.8rem;
-    }
-
-    .work-card .info .tech {
-      display: flex; gap: 0.4rem; flex-wrap: wrap;
-    }
-
-    .work-card .info .tech span {
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      background: rgba(108, 99, 255, 0.1);
-      border-radius: 4px;
-      color: var(--accent);
-    }
-
-    /* ===== Research ===== */
-    .research-list { list-style: none; }
-
-    .research-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-      transition: all 0.3s;
-    }
-
-    .research-item:hover {
-      border-color: var(--accent);
-    }
-
-    .research-item h3 {
-      font-size: 1rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .research-item p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-    }
-
-    /* ===== About / Fun ===== */
+    /* ===== About ===== */
     .about-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem;
     }
-
     .about-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      text-align: center;
-      transition: all 0.3s;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1.25rem 0.75rem;
+      text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
     .about-item:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
+      border-color: #d6d3d1; transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
-
     .about-item .emoji {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.5rem; margin-bottom: 0.5rem;
+      transition: transform 0.3s;
+      display: inline-block;
     }
-
+    .about-item:hover .emoji { transform: scale(1.2) rotate(8deg); }
     .about-item .label {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      margin-bottom: 0.2rem;
+      font-size: 0.7rem; color: var(--text-tertiary); margin-bottom: 0.2rem;
+    }
+    .about-item .value {
+      font-size: 0.78rem; font-weight: 500; color: var(--text-secondary);
+      line-height: 1.4;
     }
 
-    .about-item .value {
-      font-size: 0.95rem;
-      font-weight: 600;
+    /* ===== Contact ===== */
+    .contact-section {
+      text-align: center; padding-bottom: 4rem;
     }
+    .contact-btns {
+      display: flex; gap: 0.75rem; justify-content: center;
+      flex-wrap: wrap; margin-top: 1.5rem;
+    }
+    .contact-meta {
+      margin-top: 2rem; font-size: 0.85rem; color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .contact-meta strong { color: var(--accent); font-weight: 500; }
 
     /* ===== Footer ===== */
     footer {
       border-top: 1px solid var(--border);
       padding: 2rem;
       text-align: center;
-      color: var(--text-dim);
-      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      font-size: 0.78rem;
     }
-
-    footer .contact-links {
-      display: flex; justify-content: center; gap: 2rem;
-      margin-bottom: 1rem;
+    footer .footer-links {
+      display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem;
     }
-
-    footer .contact-links a {
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: color 0.3s;
+    footer .footer-links a {
+      color: var(--text-tertiary); transition: color 0.2s;
     }
-    footer .contact-links a:hover { color: var(--accent); }
+    footer .footer-links a:hover { color: var(--text); }
 
-    /* ===== Mobile ===== */
-    @media (max-width: 640px) {
-      nav .nav-links { display: none; }
-      .hero h1 { font-size: 2rem; }
-      section { padding: 3rem 1.25rem; }
-      .works-grid { grid-template-columns: 1fr; }
-      .edu-cards { grid-template-columns: 1fr; }
+    /* ===== Divider ===== */
+    .divider {
+      max-width: var(--max-width);
+      margin: 0 auto; padding: 0 2rem;
+    }
+    .divider hr {
+      border: none; height: 1px; background: var(--border-light);
     }
 
     /* ===== Scroll Animation ===== */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ===== Keyframes ===== */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes charReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardAppear {
+      to { opacity: 1; transform: translateY(0) rotateX(0deg); }
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes ripple {
+      to { transform: scale(4); opacity: 0; }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ===== Mobile ===== */
+    @media (max-width: 768px) {
+      nav .nav-links { display: none; }
+      .hero .container { grid-template-columns: 1fr; text-align: center; }
+      .hero-text { max-width: 100%; }
+      .hero-label { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-btns { justify-content: center; }
+      .hero-visual { order: -1; }
+      .hero-card { max-width: 320px; }
+      .works-grid { grid-template-columns: 1fr; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .about-grid { grid-template-columns: repeat(3, 1fr); }
+      section { padding: 4rem 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2.2rem; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-stats { gap: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Nav -->
   <nav>
     <div class="logo">W.W.H</div>
     <ul class="nav-links">
-      <li><a href="#about">关于</a></li>
       <li><a href="#experience">经历</a></li>
       <li><a href="#education">教育</a></li>
       <li><a href="#works">作品</a></li>
@@ -545,272 +625,365 @@
 
   <!-- Hero -->
   <section class="hero" id="about">
-    <div class="hero-content">
-      <p class="greeting">Hello, World</p>
-      <h1>王文昊</h1>
-      <p class="subtitle">
-        武汉大学产业经济学硕士 · 产品经理方向<br>
-        专注于 AI 产品与行业研究，热衷用技术创造价值
-      </p>
-      <div class="tags">
-        <span class="tag">AI 产品经理</span>
-        <span class="tag">行业研究</span>
-        <span class="tag">Python</span>
-        <span class="tag">SQL</span>
-        <span class="tag">Prompt Engineering</span>
-        <span class="tag">Comfy UI</span>
+    <div class="container">
+      <div class="hero-text">
+        <div class="hero-label" id="heroLabel">AI Product Manager</div>
+        <h1 id="heroTitle">王文昊<span class="accent">.</span></h1>
+        <p class="desc" id="heroDesc">
+          武汉大学产业经济学硕士，专注于 AI 产品设计与行业研究。<br>
+          在阿里巴巴与中金资本的实习中，将 AI 技术融入实际业务场景，<br>
+          热衷用技术创造真实价值。
+        </p>
+        <div class="hero-btns" id="heroBtns">
+          <a href="#works" class="btn btn-primary">查看作品</a>
+          <a href="#contact" class="btn btn-ghost">联系我</a>
+        </div>
+        <div class="hero-stats" id="heroStats">
+          <div class="hero-stat">
+            <div class="num" data-target="2" data-suffix="">0</div>
+            <div class="label">实习经历</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" data-target="5" data-suffix="+">0</div>
+            <div class="label">科研项目</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" data-target="91" data-suffix="">0</div>
+            <div class="label">硕士均分</div>
+          </div>
+        </div>
       </div>
-      <div class="cta">
-        <a href="#works" class="btn btn-primary">查看作品</a>
-        <a href="#contact" class="btn btn-outline">联系我</a>
+      <div class="hero-visual">
+        <div class="hero-card" id="heroCard">
+          <div class="hero-card-top">
+            <span class="hero-card-role">AI 产品经理</span>
+            <div class="hero-card-avatar">W</div>
+          </div>
+          <h3>产品经理 · 研究者</h3>
+          <p class="bio">
+            深耕 AI 产品与行业投资研究，擅长将业务洞察转化为产品方案。
+            熟练运用 Python、SQL、Prompt Engineering 等工具驱动决策。
+          </p>
+          <div class="hero-card-tags">
+            <span>Python</span>
+            <span>SQL</span>
+            <span>Prompt Engineering</span>
+            <span>Comfy UI</span>
+            <span>Coze</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track" id="marqueeTrack">
+      <span class="marquee-item"><span class="dot"></span>Python</span>
+      <span class="marquee-item"><span class="dot"></span>SQL</span>
+      <span class="marquee-item"><span class="dot"></span>Prompt Engineering</span>
+      <span class="marquee-item"><span class="dot"></span>Comfy UI</span>
+      <span class="marquee-item"><span class="dot"></span>Coze</span>
+      <span class="marquee-item"><span class="dot"></span>GPT</span>
+      <span class="marquee-item"><span class="dot"></span>Stata</span>
+      <span class="marquee-item"><span class="dot"></span>产品经理</span>
+      <span class="marquee-item"><span class="dot"></span>行业研究</span>
+      <span class="marquee-item"><span class="dot"></span>DID / RDD / IV</span>
+      <span class="marquee-item"><span class="dot"></span>Sketch</span>
+      <span class="marquee-item"><span class="dot"></span>AI Coding</span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item"><span class="dot"></span>Python</span>
+      <span class="marquee-item"><span class="dot"></span>SQL</span>
+      <span class="marquee-item"><span class="dot"></span>Prompt Engineering</span>
+      <span class="marquee-item"><span class="dot"></span>Comfy UI</span>
+      <span class="marquee-item"><span class="dot"></span>Coze</span>
+      <span class="marquee-item"><span class="dot"></span>GPT</span>
+      <span class="marquee-item"><span class="dot"></span>Stata</span>
+      <span class="marquee-item"><span class="dot"></span>产品经理</span>
+      <span class="marquee-item"><span class="dot"></span>行业研究</span>
+      <span class="marquee-item"><span class="dot"></span>DID / RDD / IV</span>
+      <span class="marquee-item"><span class="dot"></span>Sketch</span>
+      <span class="marquee-item"><span class="dot"></span>AI Coding</span>
+    </div>
+  </div>
+
+  <div class="divider"><hr></div>
 
   <!-- Experience -->
   <section id="experience">
-    <h2 class="section-title"><span class="dot"></span> 实习经历</h2>
-    <p class="section-desc">在阿里巴巴和中金资本的实习经历，让我深入理解了 AI 产品和行业投资。</p>
-
-    <div class="timeline">
-      <div class="timeline-item fade-in">
-        <p class="period">2025.05 - 2025.09</p>
-        <h3>AI 产品经理</h3>
-        <p class="company">阿里巴巴 · 淘天快时尚业务部</p>
-        <ul>
-          <li><strong>数据策略制定：</strong>负责 AI 自动化女装设计在温度和季节维度的合理性，通过 SQL 分析淘宝服饰 <strong>14 亿条</strong>商品数据，将 AI 设计反季概率降为 <strong>0</strong></li>
-          <li><strong>Prompt 体系建设：</strong>参与淘宝商品信息流中 AI 种草图片的 Prompt 库建设，沉淀优质 prompt <strong>1000+</strong> 条，能支持组合成 <strong>1 亿+</strong> 不同的生图 prompt</li>
-          <li><strong>自动化工作流：</strong>搭建基于大模型的服装改款工作流，将爆点识别成功率从 <strong>63% 提升到 78%</strong>，标签映射准确率达 <strong>91%</strong></li>
-          <li><strong>产品交付：</strong>利用 AI 撰写前端代码完成 2 个在线业务产品（高清化、批量刷标签），撰写新手引导 PRD</li>
-        </ul>
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Experience</h2>
+        <p>实习经历</p>
       </div>
 
-      <div class="timeline-item fade-in">
-        <p class="period">2025.01 - 2025.05</p>
-        <h3>AI 行业投资</h3>
-        <p class="company">中金资本</p>
-        <ul>
-          <li><strong>行业研究：</strong>完成 <strong>30+</strong> 个 AI 及智能硬件项目调研，撰写 4 篇行业研究报告、3 篇立项报告和 1 篇投决报告</li>
-          <li><strong>AI Coding 研究：</strong>系统性梳理全球 <strong>30+</strong> 家 AI 编程公司的产品与模型，撰写万字长文解析行业趋势</li>
-          <li><strong>AI Agent 研究：</strong>从原子能力角度建构 agent 投资分析框架，指出 agent 能力边界和项目研判核心维度</li>
-          <li><strong>AI 技术应用：</strong>利用 Coze 搭建 AI 日报工作流，利用 GPT 实现预立项报告自动化整理，将撰写时间缩短为原来的 <strong>1/3</strong></li>
-        </ul>
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-meta">
+            <div>
+              <div class="timeline-title">AI 产品经理</div>
+              <div class="timeline-company">阿里巴巴 · 淘天快时尚业务部</div>
+            </div>
+            <div class="timeline-period">2025.05 — 2025.09</div>
+          </div>
+          <ul>
+            <li><strong>数据策略：</strong>通过 SQL 分析淘宝服饰 <strong>14 亿条</strong>商品数据，将 AI 设计反季概率降为 <strong>0</strong></li>
+            <li><strong>Prompt 体系：</strong>搭建淘宝 AI 种草图片 Prompt 库，沉淀 <strong>1000+</strong> 条优质 prompt，可组合 <strong>1 亿+</strong> 生图方案</li>
+            <li><strong>自动化工作流：</strong>搭建服装改款工作流，爆点识别成功率从 <strong>63% 提升至 78%</strong>，标签映射准确率 <strong>91%</strong></li>
+            <li><strong>产品交付：</strong>利用 AI 撰写前端代码完成 2 个在线业务产品（高清化、批量刷标签），撰写新手引导 PRD</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-meta">
+            <div>
+              <div class="timeline-title">AI 行业投资</div>
+              <div class="timeline-company">中金资本</div>
+            </div>
+            <div class="timeline-period">2025.01 — 2025.05</div>
+          </div>
+          <ul>
+            <li><strong>行业研究：</strong>完成 <strong>30+</strong> 个 AI 及智能硬件项目调研，撰写 4 篇行业研究报告、3 篇立项报告和 1 篇投决报告</li>
+            <li><strong>AI Coding 研究：</strong>系统性梳理全球 <strong>30+</strong> 家 AI 编程公司，撰写万字长文解析行业趋势</li>
+            <li><strong>AI Agent 研究：</strong>从原子能力角度建构 Agent 投资分析框架，指出能力边界和研判核心维度</li>
+            <li><strong>AI 技术应用：</strong>搭建 AI 日报工作流，实现预立项报告自动化整理，撰写时间缩短为 <strong>1/3</strong></li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
+
+  <div class="divider"><hr></div>
 
   <!-- Education -->
   <section id="education">
-    <h2 class="section-title"><span class="dot"></span> 教育背景</h2>
-    <p class="section-desc">武汉大学本硕连读，经济学 + 产业经济学。</p>
-
-    <div class="edu-cards">
-      <div class="edu-card fade-in">
-        <p class="period">2023.09 - 2026.06</p>
-        <h3>武汉大学 · 硕士</h3>
-        <p class="detail">产业经济学 · 均分 91/100</p>
-        <p class="highlight">武汉大学三好学生</p>
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Education</h2>
+        <p>教育背景</p>
       </div>
-      <div class="edu-card fade-in">
-        <p class="period">2019.09 - 2023.06</p>
-        <h3>武汉大学 · 本科</h3>
-        <p class="detail">经济学（基地班）· GPA 3.78/4.00 · 专业前 20% · 保研</p>
-        <p class="highlight">美国大学生数学建模大赛 M 奖（全球前 7%）</p>
+
+      <div class="edu-grid">
+        <div class="edu-card reveal reveal-delay-1">
+          <div class="edu-period">2023.09 — 2026.06</div>
+          <div class="edu-title">武汉大学 · 硕士</div>
+          <div class="edu-detail">产业经济学 · 均分 91/100</div>
+          <div class="edu-highlight">武汉大学三好学生</div>
+        </div>
+        <div class="edu-card reveal reveal-delay-2">
+          <div class="edu-period">2019.09 — 2023.06</div>
+          <div class="edu-title">武汉大学 · 本科</div>
+          <div class="edu-detail">经济学（基地班）· GPA 3.78/4.00 · 前 20% · 保研</div>
+          <div class="edu-highlight">MCM/ICM M 奖（全球前 7%）</div>
+        </div>
+      </div>
+
+      <div class="research-section reveal">
+        <h3>科研与竞赛</h3>
+        <div class="research-list">
+          <div class="research-item">
+            <h4>新能源汽车在线虚假评论研究</h4>
+            <p>爬取 5 万+ 用户评论，利用 Python 进行 TF-IDF 词频分析、词云分析、时空特征分析</p>
+          </div>
+          <div class="research-item">
+            <h4>高等教育系统健康度量模型</h4>
+            <p>2021 年美国大学生数学建模大赛 F 题，全英文报告 25 页，获 M 奖（全球前 7%）</p>
+          </div>
+          <div class="research-item">
+            <h4>Sulfur Dioxide Emission Trading 研究</h4>
+            <p>整理 277 个地级市 2003-2013 年面板数据，构建 DID 模型分析政策冲击效应</p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <h3 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.1rem;" class="fade-in">科研与竞赛</h3>
-    <ul class="research-list">
-      <li class="research-item fade-in">
-        <h3>新能源汽车在线虚假评论研究</h3>
-        <p>爬取 5 万+ 用户评论，利用 Python 进行 TF-IDF 词频分析、词云分析、时空特征分析</p>
-      </li>
-      <li class="research-item fade-in">
-        <h3>高等教育系统健康度量模型</h3>
-        <p>2021 年美国大学生数学建模大赛 F 题，全英文报告 25 页，获 M 奖（全球前 7%）</p>
-      </li>
-      <li class="research-item fade-in">
-        <h3>Sulfur Dioxide Emission Trading 研究</h3>
-        <p>整理 277 个地级市 2003-2013 年面板数据，构建 DID 模型分析政策冲击效应</p>
-      </li>
-    </ul>
   </section>
+
+  <div class="divider"><hr></div>
 
   <!-- Works -->
   <section id="works">
-    <h2 class="section-title"><span class="dot"></span> 作品展示</h2>
-    <p class="section-desc">一些我用代码和技术实现的有趣项目。</p>
-
-    <div class="works-grid">
-      <!-- Snake Game -->
-      <div class="work-card fade-in">
-        <div class="preview snake-preview">
-          <span class="game-icon">🐍</span>
-          <div class="play-overlay">
-            <a href="https://wenhao200.github.io/snake-game/" target="_blank" class="play-btn">▶</a>
-          </div>
-        </div>
-        <div class="info">
-          <h3>贪吃蛇小游戏</h3>
-          <p>纯 HTML + CSS + JavaScript 实现的经典贪吃蛇游戏，支持键盘和 WASD 操控，带渐变蛇身和发光效果。</p>
-          <div class="tech">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>Canvas</span>
-          </div>
-        </div>
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Works</h2>
+        <p>作品展示</p>
       </div>
 
-      <!-- Prompt System -->
-      <div class="work-card fade-in">
-        <div class="preview" style="background: linear-gradient(135deg, #1a0a2e, #2a1a3e);">
-          <span class="game-icon">🤖</span>
-        </div>
-        <div class="info">
-          <h3>AI Prompt 体系</h3>
-          <p>为淘宝商品信息流搭建的模块化 Prompt 库，支持语义解耦与自由拼接，沉淀 1000+ 优质 prompt。</p>
-          <div class="tech">
-            <span>Prompt Engineering</span>
-            <span>AI</span>
-            <span>Stata</span>
+      <div class="works-grid">
+        <div class="work-card reveal reveal-delay-1">
+          <div class="preview bg-snake">
+            <span class="icon">🐍</span>
+            <div class="overlay">
+              <a href="https://wenhao200.github.io/snake-game/" target="_blank" class="play-btn">▶</a>
+            </div>
+          </div>
+          <div class="info">
+            <h3>贪吃蛇小游戏</h3>
+            <p>纯 HTML + CSS + JavaScript 实现的经典贪吃蛇游戏，支持键盘和 WASD 操控，带渐变蛇身和发光效果。</p>
+            <div class="tech">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Canvas</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- AI Marketing Image Generator -->
-      <div class="work-card fade-in">
-        <div class="preview" style="background: linear-gradient(135deg, #1a0a2e, #2a1a4e);">
-          <span class="game-icon">🎨</span>
-          <div class="play-overlay">
-            <a href="https://q2czm2krs9.coze.site" target="_blank" class="play-btn">▶</a>
+        <div class="work-card reveal reveal-delay-2">
+          <div class="preview bg-prompt">
+            <span class="icon">🤖</span>
+          </div>
+          <div class="info">
+            <h3>AI Prompt 体系</h3>
+            <p>为淘宝商品信息流搭建的模块化 Prompt 库，支持语义解耦与自由拼接，沉淀 1000+ 优质 prompt。</p>
+            <div class="tech">
+              <span>Prompt Engineering</span><span>AI</span><span>Stata</span>
+            </div>
           </div>
         </div>
-        <div class="info">
-          <h3>AI 营销图生成器</h3>
-          <p>大模型驱动的营销设计工具，支持上传商品图 → 识别 → 爆款分析 → AI 生成营销图 → 下载，全流程自动化。</p>
-          <div class="tech">
-            <span>Coze</span>
-            <span>GPT</span>
-            <span>AI 生成</span>
+
+        <div class="work-card reveal reveal-delay-3">
+          <div class="preview bg-marketing">
+            <span class="icon">🎨</span>
+            <div class="overlay">
+              <a href="https://q2czm2krs9.coze.site" target="_blank" class="play-btn">▶</a>
+            </div>
+          </div>
+          <div class="info">
+            <h3>AI 营销图生成器</h3>
+            <p>大模型驱动的营销设计工具，上传商品图 → 识别 → 爆款分析 → AI 生成营销图 → 下载。</p>
+            <div class="tech">
+              <span>Coze</span><span>GPT</span><span>AI 生成</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <div class="divider"><hr></div>
 
   <!-- Skills -->
   <section id="skills">
-    <h2 class="section-title"><span class="dot"></span> 技能</h2>
-    <p class="section-desc">持续学习中，不断拓展边界。</p>
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Skills</h2>
+        <p>技能</p>
+      </div>
 
-    <div class="skills-grid">
-      <div class="skill-category fade-in">
-        <h3>💻 编程与数据</h3>
-        <div class="skill-tags">
-          <span class="skill-tag">Python</span>
-          <span class="skill-tag">SQL</span>
-          <span class="skill-tag">Stata</span>
-          <span class="skill-tag">R</span>
-          <span class="skill-tag">Prompt Engineering</span>
+      <div class="skills-grid">
+        <div class="skill-card reveal reveal-delay-1">
+          <h4>编程与数据</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">Stata</span>
+            <span class="skill-tag">R</span>
+            <span class="skill-tag">Prompt Engineering</span>
+          </div>
         </div>
-      </div>
-      <div class="skill-category fade-in">
-        <h3>🎨 设计与产品</h3>
-        <div class="skill-tags">
-          <span class="skill-tag">Sketch</span>
-          <span class="skill-tag">PS</span>
-          <span class="skill-tag">PRD 撰写</span>
-          <span class="skill-tag">用户体验</span>
+        <div class="skill-card reveal reveal-delay-2">
+          <h4>设计与产品</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">Sketch</span>
+            <span class="skill-tag">Photoshop</span>
+            <span class="skill-tag">PRD 撰写</span>
+            <span class="skill-tag">用户体验</span>
+          </div>
         </div>
-      </div>
-      <div class="skill-category fade-in">
-        <h3>🤖 AI 工具</h3>
-        <div class="skill-tags">
-          <span class="skill-tag">Comfy UI</span>
-          <span class="skill-tag">Coze</span>
-          <span class="skill-tag">GPT</span>
-          <span class="skill-tag">Liblib</span>
-          <span class="skill-tag">AI Coding</span>
+        <div class="skill-card reveal reveal-delay-3">
+          <h4>AI 工具</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">Comfy UI</span>
+            <span class="skill-tag">Coze</span>
+            <span class="skill-tag">GPT</span>
+            <span class="skill-tag">Liblib</span>
+            <span class="skill-tag">AI Coding</span>
+          </div>
         </div>
-      </div>
-      <div class="skill-category fade-in">
-        <h3>📊 金融与投研</h3>
-        <div class="skill-tags">
-          <span class="skill-tag">Wind</span>
-          <span class="skill-tag">因果推断 (DID/RDD/IV)</span>
-          <span class="skill-tag">行业研究</span>
+        <div class="skill-card reveal reveal-delay-1">
+          <h4>金融与投研</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">Wind</span>
+            <span class="skill-tag">DID / RDD / IV</span>
+            <span class="skill-tag">行业研究</span>
+          </div>
         </div>
-      </div>
-      <div class="skill-category fade-in">
-        <h3>🌐 语言</h3>
-        <div class="skill-tags">
-          <span class="skill-tag">GRE 315</span>
-          <span class="skill-tag">CET-6 566</span>
-          <span class="skill-tag">全英文研究报告</span>
+        <div class="skill-card reveal reveal-delay-2">
+          <h4>语言能力</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">GRE 315</span>
+            <span class="skill-tag">CET-6 566</span>
+            <span class="skill-tag">全英文研究报告</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Fun Facts -->
+  <div class="divider"><hr></div>
+
+  <!-- About -->
   <section>
-    <h2 class="section-title"><span class="dot"></span> 关于我</h2>
-    <p class="section-desc">不只是代码和工作。</p>
-
-    <div class="about-grid fade-in">
-      <div class="about-item">
-        <div class="emoji">🏸</div>
-        <div class="label">运动</div>
-        <div class="value">羽毛球爱好者</div>
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>About</h2>
+        <p>关于我</p>
       </div>
-      <div class="about-item">
-        <div class="emoji">⛰️</div>
-        <div class="label">徒步</div>
-        <div class="value">中国十大路线走过 6 条</div>
-      </div>
-      <div class="about-item">
-        <div class="emoji">🎨</div>
-        <div class="label">绘画</div>
-        <div class="value">从小学到大</div>
-      </div>
-      <div class="about-item">
-        <div class="emoji">📖</div>
-        <div class="label">阅读</div>
-        <div class="value">年均 150h+</div>
-      </div>
-      <div class="about-item">
-        <div class="emoji">🎬</div>
-        <div class="label">电影</div>
-        <div class="value">年均观影 70+</div>
-      </div>
-      <div class="about-item">
-        <div class="emoji">📝</div>
-        <div class="label">公众号</div>
-        <div class="value">昊思昊学 · 41次转发</div>
+      <div class="about-grid reveal">
+        <div class="about-item">
+          <div class="emoji">🏸</div>
+          <div class="label">运动</div>
+          <div class="value">羽毛球爱好者</div>
+        </div>
+        <div class="about-item">
+          <div class="emoji">⛰️</div>
+          <div class="label">徒步</div>
+          <div class="value">十大路线走过 6 条</div>
+        </div>
+        <div class="about-item">
+          <div class="emoji">🎨</div>
+          <div class="label">绘画</div>
+          <div class="value">从小学到大</div>
+        </div>
+        <div class="about-item">
+          <div class="emoji">📖</div>
+          <div class="label">阅读</div>
+          <div class="value">年均 150h+</div>
+        </div>
+        <div class="about-item">
+          <div class="emoji">🎬</div>
+          <div class="label">电影</div>
+          <div class="value">年均观影 70+</div>
+        </div>
+        <div class="about-item">
+          <div class="emoji">📝</div>
+          <div class="label">公众号</div>
+          <div class="value">昊思昊学</div>
+        </div>
       </div>
     </div>
   </section>
+
+  <div class="divider"><hr></div>
 
   <!-- Contact -->
-  <section id="contact" style="text-align: center;">
-    <h2 class="section-title" style="justify-content: center;"><span class="dot"></span> 联系我</h2>
-    <p class="section-desc">欢迎交流合作！</p>
-
-    <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem;">
-      <a href="mailto:954601208@qq.com" class="btn btn-outline">📧 954601208@qq.com</a>
-      <a href="tel:13264824372" class="btn btn-outline">📱 13264824372</a>
-    </div>
-
-    <div style="margin-top: 2rem; color: var(--text-dim); font-size: 0.9rem;">
-      <p>📍 北京 · 上海 · 深圳 · 杭州</p>
-      <p style="margin-top: 0.5rem;">个人公众号：<strong style="color: var(--accent);">昊思昊学</strong> — 代表作《万字长文：AI coding 产品形式、自研模型》</p>
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="section-header reveal" style="text-align:center;">
+        <h2>Contact</h2>
+        <p>联系我</p>
+      </div>
+      <div class="contact-btns reveal">
+        <a href="mailto:954601208@qq.com" class="btn btn-ghost">📧 954601208@qq.com</a>
+        <a href="tel:13264824372" class="btn btn-ghost">📱 13264824372</a>
+      </div>
+      <div class="contact-meta reveal">
+        <p>📍 北京 · 上海 · 深圳 · 杭州</p>
+        <p>个人公众号：<strong>昊思昊学</strong> — 代表作《万字长文：AI coding 产品形式、自研模型》</p>
+      </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <div class="contact-links">
+    <div class="footer-links">
       <a href="#about">关于</a>
       <a href="#experience">经历</a>
       <a href="#works">作品</a>
@@ -819,17 +992,159 @@
     <p>© 2025 王文昊 · Built with HTML, CSS & JavaScript</p>
   </footer>
 
-  <!-- Scroll Animation -->
+  <!-- Scripts -->
   <script>
-    const observer = new IntersectionObserver((entries) => {
+    // ===== Cursor Glow =====
+    const glow = document.getElementById('cursorGlow');
+    let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+    });
+
+    function animateGlow() {
+      glowX += (mouseX - glowX) * 0.08;
+      glowY += (mouseY - glowY) * 0.08;
+      glow.style.transform = `translate(${glowX - 200}px, ${glowY - 200}px)`;
+      requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+
+    // ===== Scroll Progress =====
+    const progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = `${(scrolled / total) * 100}%`;
+    });
+
+    // ===== Nav Shadow =====
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // ===== Hero Typewriter =====
+    function initHeroAnimation() {
+      // Animate title characters
+      const title = document.getElementById('heroTitle');
+      const nameText = '王文昊';
+      const dotText = '.';
+      title.innerHTML = '';
+      
+      // Build name characters
+      const allChars = [...nameText, dotText];
+      allChars.forEach((char, i) => {
+        const span = document.createElement('span');
+        span.className = 'char animate';
+        span.textContent = char;
+        span.style.animationDelay = `${0.5 + i * 0.08}s`;
+        if (char === '.') {
+          span.classList.add('accent');
+        }
+        title.appendChild(span);
+      });
+
+      // Trigger other hero elements
+      requestAnimationFrame(() => {
+        document.getElementById('heroLabel').classList.add('animate');
+        document.getElementById('heroDesc').classList.add('animate');
+        document.getElementById('heroBtns').classList.add('animate');
+        document.getElementById('heroStats').classList.add('animate');
+        document.getElementById('heroCard').classList.add('animate');
+      });
+
+      // Count up numbers after delay
+      setTimeout(animateCounters, 1800);
+    }
+
+    // ===== Number Counter =====
+    function animateCounters() {
+      document.querySelectorAll('.hero-stat .num').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        const duration = 1500;
+        const start = performance.now();
+        
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease out cubic
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.round(eased * target);
+          el.textContent = current + suffix;
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    // ===== Hero Card 3D Tilt =====
+    const heroCard = document.getElementById('heroCard');
+    if (window.innerWidth > 768) {
+      heroCard.addEventListener('mousemove', e => {
+        const rect = heroCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -6;
+        const rotateY = ((x - centerX) / centerX) * 6;
+        heroCard.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+      heroCard.addEventListener('mouseleave', () => {
+        heroCard.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+        heroCard.style.transition = 'transform 0.5s ease';
+        setTimeout(() => heroCard.style.transition = 'transform 0.15s ease-out, box-shadow 0.3s', 500);
+      });
+    }
+
+    // ===== Work Card 3D Tilt =====
+    document.querySelectorAll('.work-card').forEach(card => {
+      if (window.innerWidth <= 768) return;
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -4;
+        const rotateY = ((x - centerX) / centerX) * 4;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+      });
+    });
+
+    // ===== Button Ripple =====
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+        this.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
+      });
+    });
+
+    // ===== Scroll Reveal =====
+    const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ===== Init =====
+    document.addEventListener('DOMContentLoaded', initHeroAnimation);
   </script>
 
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenClaw：315K Star 开源 AI Agent 深度解析 | 王文昊</title>
+  <title>OpenClaw vs Hermes Agent vs OpenHuman — AI Agent 三层生态深度对比 | 王文昊</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -34,8 +34,8 @@
     .article-meta h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
     .article-meta time { font-size: 0.85rem; color: var(--text-tertiary); }
     .article-body { font-size: 1rem; line-height: 1.9; color: var(--text); }
-    .article-body h2 { font-size: 1.4rem; padding: 16px 20px; margin: 24px 0 16px; background: linear-gradient(135deg, #f0f4ff, #e8edf5); border-left: 5px solid #4a6fa5; border-radius: 0 8px 8px 0; }
-    .article-body h3 { font-size: 1.15rem; padding: 10px 16px; margin: 20px 0 12px; background: #f5f7fa; border-left: 4px solid #7a9bcb; border-radius: 0 6px 6px 0; }
+    .article-body h2 { font-size: 1.4rem; padding: 14px 18px; margin: 28px 0 14px; background: linear-gradient(135deg, #f0f4ff, #e8edf5); border-left: 5px solid #4a6fa5; border-radius: 0 8px 8px 0; }
+    .article-body h3 { font-size: 1.15rem; padding: 8px 16px; margin: 22px 0 12px; background: #f5f7fa; border-left: 4px solid #7a9bcb; border-radius: 0 6px 6px 0; }
     .article-body p { margin-bottom: 1.2rem; }
     .article-body blockquote { border-left: 3px solid var(--accent); padding: 0.5rem 1rem; margin: 1rem 0; background: rgba(180,83,9,0.04); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
     .article-body code { background: var(--bg-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
@@ -46,6 +46,10 @@
     .article-body th { background: #3a3f5c; color: #fff; padding: 12px 14px; text-align: left; font-weight: 600; font-size: 0.95em; }
     .article-body td { padding: 10px 14px; border-bottom: 1px solid #edf0f5; font-size: 0.93em; color: #3f3f3f; }
     .article-body tr:nth-child(even) { background: #f8f9fb; }
+    .article-body strong { font-weight: 600; }
+    .article-body a { color: var(--accent); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    .article-body a:hover { border-bottom-color: var(--accent); }
+    .article-body pre { background: #1e1e2e; color: #cdd6f4; padding: 1rem 1.2rem; border-radius: var(--radius-sm); overflow-x: auto; margin: 1rem 0; font-size: 0.88rem; line-height: 1.6; }
     .article-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
     .article-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-size: 0.9rem; transition: color 0.2s; }
     .article-back:hover { color: var(--text); }
@@ -67,91 +71,265 @@
   <div class="article-page">
     <div class="article-container">
       <div class="article-meta">
-        <span class="label">AI Agent · 开源项目</span>
-        <h1>OpenClaw：315K Star 开源 AI Agent 深度解析</h1>
+        <span class="label">AI Agent · 开源对比</span>
+        <h1>OpenClaw vs Hermes Agent vs OpenHuman — AI Agent 三层生态深度对比</h1>
         <time>2026-05-29</time>
       </div>
       <div class="article-body">
+<p>2026 年如果你关注开源 AI 领域，这三个名字一定绕不开。它们各自成长极快，GitHub 上动辄数万星，社区讨论铺天盖地。</p>
+<p>但它们真的是一回事吗？</p>
+<p>答案是否定的——<strong>它们解决的是完全不同层面的问题</strong>。读完之后你不仅知道「哪个更好」，更知道「我的问题属于哪一层」。</p>
+<hr />
+<h2>一个框架先帮你锚定：三层生态</h2>
+<p>在深入每个项目之前，先建立这个坐标系，后面所有对比都会落回这张图：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">graph</span><span class="w"> </span><span class="nv">TB</span>
+<span class="w">    </span><span class="nv">subgraph</span><span class="w"> </span><span class="s2">&quot;AI Agent 三层生态&quot;</span>
+<span class="w">        </span><span class="nv">LayerE</span>[<span class="s2">&quot;🟢 环境层&lt;br/&gt;OpenClaw&lt;br/&gt;解决的问题：AI 被锁在一个 App 里&lt;br/&gt;核心能力：跨平台消息 + 浏览器操控&quot;</span>]
+<span class="w">        </span><span class="nv">LayerX</span>[<span class="s2">&quot;🔵 执行层&lt;br/&gt;Hermes Agent&lt;br/&gt;解决的问题：AI 做完就忘&lt;br/&gt;核心能力：闭环学习 + 自动创建技能&quot;</span>]
+<span class="w">        </span><span class="nv">LayerM</span>[<span class="s2">&quot;🟠 记忆层&lt;br/&gt;OpenHuman&lt;br/&gt;解决的问题：AI 从来记不住你&lt;br/&gt;核心能力：长期记忆树 + 多服务自动同步&quot;</span>]
+<span class="w">    </span><span class="k">end</span>
+</code></pre></div>
 
-<h2>什么是 OpenClaw？</h2>
-
-<p>2026 年初，一个名为 <strong>OpenClaw</strong> 的开源项目在 GitHub 上势如破竹——不到 5 个月狂揽 27.9 万 Star，一举超越 React 登顶全球 GitHub Star 榜榜首。<strong>它究竟是什么？</strong></p>
-
-<p>简单来说，OpenClaw 是一个<strong>自托管的个人 AI 助理平台</strong>——一个"数字打工人"。与 ChatGPT 或 DeepSeek 这种"对话顾问"不同，OpenClaw 能接入你日常使用的聊天工具（微信、飞书、钉钉、QQ 等 20+ 渠道），理解你的自然语言指令，然后<strong>主动去执行任务</strong>：管理日程、收发邮件、操作浏览器、运行代码……</p>
-
-<h2>架构设计：为什么它能这么火？</h2>
-
-<h3>三层解耦架构</h3>
-<p>OpenClaw 的核心设计遵循 Unix 哲学——极简、透明、可组合。它由三个独立组件构成：</p>
+<p><strong>环境层</strong>让 AI 跑起来、能操作工具；<strong>执行层</strong>让 AI 学会更聪明地干活；<strong>记忆层</strong>让 AI 真正理解你的上下文。这三层互不冲突，甚至可以叠加使用。</p>
+<hr />
+<h2>一、OpenClaw — 环境层：把 AI 从 App 里解放出来</h2>
+<h3>解决什么问题</h3>
+<p>你现在跟 AI 对话是在哪个界面？ChatGPT 网页、Claude 客户端、还是某个 IDE 插件？不管哪种，AI 都被「锁」在了那个 App 里。你想在微信上喊它查个东西，它不在。你想它帮你操作浏览器，它做不到。</p>
+<p>OpenClaw 的核心方案是一个<strong>Gateway（网关）</strong>——你可以把它理解成一个消息中转站。你在微信发出的消息，先到 Gateway，Gateway 判断该调用哪个能力（浏览器、代码执行、还是知识库），执行完后原路返回给你。这个设计的关键在于：<strong>无论消息来自哪个平台，Gateway 都转成统一格式处理，处理完再转回对应平台的格式发出去</strong>。所以你只需要写一套 AI 逻辑，就能在所有平台上用。</p>
+<h3>它怎么做到的</h3>
+<p>技术层面看，OpenClaw 是 Rust 编写的守护进程（daemon），常驻在你电脑后台，主要靠三个核心技术运转：</p>
+<p><strong>1. CDP（Chrome DevTools Protocol）——做浏览器的遥控器</strong></p>
+<p>CDP 是 Chrome 开放的一组 API，外部程序可以通过 WebSocket 连接浏览器，执行打开页面、点击按钮、填写表单、截图等操作。几乎所有浏览器自动化工具（Playwright、Puppeteer）底层都在用 CDP。OpenClaw 在此基础上封装了一层<strong>「快照-动作」模式</strong>：</p>
 <ul>
-  <li><strong>Gateway（网关）</strong>：中央控制平面，负责消息路由和身份管理</li>
-  <li><strong>Node（节点）</strong>：设备执行端，连接到你的电脑或服务器</li>
-  <li><strong>Channel（渠道）</strong>：消息接入层，连接微信、飞书等聊天工具</li>
+<li>先用 <code>browser snapshot</code> 给页面拍快照，生成一棵结构化 UI 树，每个可交互元素获得一个唯一 <code>ref</code> ID</li>
+<li>AI 分析 UI 树，决定操作目标</li>
+<li>用 <code>browser act --ref &lt;ID&gt;</code> 执行点击或输入</li>
 </ul>
-<p>三层通过 WebSocket 总线通信，默认优先本地回环连接以保障安全性。这意味着你可以把 Gateway 部署在云上，Node 跑在家里的 NAS 上，通过手机微信来指挥它。</p>
+<p><strong>为什么不用传统的 CSS 选择器？</strong> 因为网页经常改版，CSS 选择器很容易失效。<code>ref</code> ID 是 OpenClaw 自己生成的，完全不依赖网页 DOM 结构，稳定性高得多。</p>
+<p><strong>2. 多 Profile 隔离</strong></p>
+<p>OpenClaw 有一个独立的浏览器用户数据目录，跟你的个人 Chrome 配置完全隔离（甚至默认用橙色主题作视觉区分）。它还支持创建多个 Profile（比如一个用于工作、一个用于远程）——每个 Profile 可以有独立的浏览器可执行文件、CDP 端口、代理设置，甚至不同的配色。</p>
+<p><strong>3. 插件系统与 Skill（技能）</strong></p>
+<p>OpenClaw 的社区生态围绕插件和技能展开。技能包本质上是可复用的操作指南——比如一个「浏览器自动化」技能会告诉 AI 完整的「先快照→分析→再操作」流程。你不需要从头教 AI 每一步。</p>
+<h3>一句话总结</h3>
+<blockquote>
+<p>OpenClaw 是<strong>唯一能让你在微信、Telegram、Slack 同时使用同一个 AI 的工具</strong>，同时赋予它操控浏览器和执行代码的能力。但它的安装和学习门槛也最高，适合愿意折腾 CLI 的用户。</p>
+</blockquote>
+<hr />
+<h2>二、Hermes Agent — 执行层：让 AI 学会做事并记住怎么做</h2>
+<h3>解决什么问题</h3>
+<p>你用 AI 搭了一套环境、写了一个自动化脚本，效果很好。但第二天来了个类似任务，AI 完全忘了昨天做过什么，重新推理一遍，还可能犯同样的错。你心想：<strong>为什么 AI 不能像人一样积累经验？</strong></p>
+<p>Hermes Agent 的核心理念就在于此——它不只是执行任务，还会从每次执行中提炼经验，把「怎么做」固化为可复用的能力。</p>
+<h3>最独特的能力：闭环学习系统</h3>
+<p>Hermes Agent 的运行逻辑是一个闭环：</p>
+<div class="codehilite"><pre><span></span><code>Step 1: 接受任务 → AI 思考步骤、调工具、逐项执行
+Step 2: 完成任务 → AI 回顾整个执行过程，识别可泛化的模式
+Step 3: 提炼技能 → 把操作步骤抽象化，写成 SKILL.md
+Step 4: 存入技能库 → 下次遇到类似任务直接调用，无需重新推理
+</code></pre></div>
 
-<h3>四个核心工具（极简哲学）</h3>
-<p>其他 AI Agent 框架倾向于封装复杂的 API，而 OpenClaw 只用四个最底层的工具让 Agent 直接操作你的系统：</p>
+<p>这里的<strong>泛化（Generalization）</strong> 是关键。Hermes 不是简单地「录制操作日志」，而是理解问题模式。比如「在服务器上部署 Nginx」这个任务，它会提炼为：「检测目标 OS → 根据 OS 执行对应安装命令 → 复制配置文件 → 重启服务」。换个 Linux 发行版照样能用。</p>
+<p>学到的技能存在本地技能库，遵循开放的 <code>SKILL.md</code> 格式，兼容 <code>agentskills.io</code> 标准，社区之间可以互通共享。</p>
+<h3>持久记忆系统</h3>
+<p>记忆靠两套机制协同工作：</p>
 <ul>
-  <li><strong>Read</strong>：读取文件内容</li>
-  <li><strong>Write</strong>：写入或修改文件</li>
-  <li><strong>Edit</strong>：精确查找替换</li>
-  <li><strong>Bash</strong>：执行终端命令</li>
+<li><strong>FTS5 全文搜索</strong>：SQLite 内置的全文索引引擎，可以毫秒级检索历史对话和操作记录</li>
+<li><strong>LLM 自动总结</strong>：每次交互结束后，AI 自己判断哪些信息值得长期保存（用户偏好、项目关键决策、常用配置），消化成结构化摘要存入数据库</li>
 </ul>
-<p>这四板斧看似简单，但组合起来赋予了 AI 几乎无限的能力——因为一切软件归根结底都是文件读写 + 命令执行。</p>
+<p>下次你打开新会话，Hermes 会自动拉取跟当前上下文相关的记忆片段，注入到提示中。这就是「不会每次从零开始」的实现原理。</p>
+<h3>并行子 Agent 架构</h3>
+<p>对于可拆解的大型任务，主 Agent 作为协调者（Orchestrator），通过 RPC（远程过程调用）把子任务分发给多个子 Agent。每个子 Agent 有独立的对话上下文和终端沙箱环境，互不污染：</p>
+<div class="codehilite"><pre><span></span><code>主 Agent（总指挥）
+    ├── 子 Agent 1：搜索资料并整理摘要
+    ├── 子 Agent 2：基于摘要编写代码
+    └── 子 Agent 3：在独立沙箱中跑测试并汇报结果
+</code></pre></div>
 
-<h3>四层记忆系统</h3>
-<p>另一个引起社区热议的设计是 OpenClaw 的记忆系统：</p>
-<ul>
-  <li><strong>SOUL</strong>：不可变的人格设定——你的 AI 的"灵魂"</li>
-  <li><strong>TOOLS</strong>：动态工具使用记录——它学会了用什么工具</li>
-  <li><strong>USER</strong>：语义长期记忆——通过向量搜索记住你的偏好</li>
-  <li><strong>Session</strong>：实时会话上下文——当前对话的"工作记忆"</li>
-</ul>
-<p>特别值得一提的是，所有记忆都是纯 Markdown 文本文件，直接用文件系统存储。这意味着你可以像一个普通文本文件一样直接编辑 AI 的记忆——不需要数据库，不需要 API。</p>
+<p>这带来了三个好处：任务级并行加速、上下文隔离（一个子任务的 token 不会污染另一个）、以及水平扩展能力（加子 Agent 就能加吞吐量）。</p>
+<h3>执行安全</h3>
+<p>Hermes 提供四种可选的执行沙箱：
+- <strong>本地终端</strong>：直接执行（适合开发调试）
+- <strong>Docker</strong>：隔离容器，只读根文件系统 + 权限降级（推荐生产使用）
+- <strong>SSH</strong>：远程执行，用于管理云服务器
+- <strong>Modal / Singularity</strong>：高性能计算环境</p>
+<h3>一句话总结</h3>
+<blockquote>
+<p>Hermes Agent 是<strong>唯一能自动从经验中学习、越用越聪明的 AI Agent</strong>。它的「闭环学习 → 自动创建技能」在同类中是独一份，但需要你愿意花时间让它积累，适合研究者和重度开发者。</p>
+</blockquote>
+<hr />
+<h2>三、OpenHuman — 记忆层：让 AI 真正记住你的一切</h2>
+<h3>解决什么问题</h3>
+<p>你跟 AI 聊了半小时自己的项目背景、偏好、近期动向。第二天打开同一个 AI，它问「你是谁……」。更气人的是，你明明有大量的数据分布在 Gmail、Notion、GitHub、日历里，但 AI 完全不知道它们存在，也读不了。</p>
+<p>OpenHuman 的答案是：<strong>把 AI 做的第一件事从「对话」变成「了解你」</strong>。</p>
+<h3>独特的技术架构</h3>
+<p>OpenHuman 是这三个项目中<strong>唯一拥有原生桌面 GUI 的</strong>，基于 <strong>Rust + Tauri</strong> 框架构建（不是常用的 Electron，性能更好、安装包更小）【这里一些英文需要解释一下】。macOS 上是 DMG 安装包，Windows 上是 EXE，下载双击即装。打开后是一个完整的桌面应用——有聊天面板、有可视化工作区、有连接状态指示。</p>
+<p>但 GUI 只是表象，真正核心的是三层技术系统：</p>
+<h3>第一层：Memory Tree（记忆树）</h3>
+<p>这是 OpenHuman 区别于所有同类项目的根本。大多数 AI 的记忆系统基于向量数据库 + 相似度搜索——相当于在文件柜里把所有便利贴混在一起，搜的时候靠「语义上大概像」。Memory Tree 不同，它把信息组织成三层树状结构：【openclaw 没有吗，他的记忆系统是什么样的】</p>
+<div class="codehilite"><pre><span></span><code>全局层（Global）          ← 概括性知识：「用户是产品经理，关注 AI 和社区方向」
+    ↑
+主题层（Topic）           ← 按项目/主题分类：「小红书面试准备」、「硕士论文」
+    ↑
+来源层（Source）          ← 原始数据节点：某封邮件、某条 Notion 笔记、某次对话
+</code></pre></div>
 
-<h3>反 MCP 协议</h3>
-<p>OpenClaw 的创始人做出了一个争议性决定：<strong>刻意不支持业界大热的 MCP 协议</strong>。他认为 CLI（命令行接口）才是智能体连接世界的终极接口。这个"反叛"的设计哲学反而吸引了大量认同 Unix 哲学的开发者。</p>
+<p>每次有新数据进来，系统会：把数据切成 ≤3,000 token 的小块（chunk）→ 归类到对应的来源层节点 → 更新上一层（主题层）的摘要 → 如果主题层有变化，更新全局层。</p>
+<p>这就好比你在整理文件夹：收到新文件 → 归入对应文件夹 → 更新文件夹描述 → 如果文件夹多了，更新总目录索引。</p>
+<p>当你问「昨天张总邮件里提到的方案是哪个？」，Memory Tree 直接导航到「张总 → 邮件 → 昨天」这条路径下的相关 chunk，而不是在整个向量空间里模糊搜索。这种结构性带来了更精准的回答，尤其是涉及<strong>人、时间、项目</strong>这类多维度问题时。</p>
+<h3>第二层：自动同步系统</h3>
+<p>OAuth（授权协议）连接 118+ 个第三方服务——Gmail、Notion、GitHub、Slack、Google Calendar 等。连接后，<strong>无需任何额外配置</strong>，系统每 20 分钟自动拉取新数据（auto-fetch），经过 Memory Tree 处理后入库存入本地。</p>
+<p>这意味着：你授权 Gmail 后，新邮件自动出现在 AI 的可检索记忆里；你授权 GitHub 后，新 PR 和 Issue 自动被索引。数据全部本地存储在 <code>~/.openhuman</code> 目录下，<strong>不主动发给 AI 对话的内容不会外传</strong>。</p>
+<h3>第三层：TokenJuice 压缩技术</h3>
+<p>大模型按 token 收费（1 token ≈ 0.5 个中文词）。工具输出、网页抓取、邮件原文往往体积庞大，直接喂给模型消耗巨大。TokenJuice 的压缩逻辑是：<strong>保留语义精华，去掉结构冗余</strong>。比如 <code>ls -la</code> 输出的几百行文件列表，压缩后只剩关键文件和大小；网页抓取结果去掉广告和导航栏只留正文。实际使用中最高能节省 80% 的 token 消耗。</p>
+<h3>自动模型路由</h3>
+<p>你不需要手动切换模型。OpenHuman 内置路由决策引擎，根据三个维度动态选择：</p>
+<div class="codehilite"><pre><span></span><code>输入任务 → 是否涉及隐私（如个人邮件）？
+    是 → 路由到本地模型（Ollama/LM Studio）
+    否 → 判断任务复杂度
+        简单（如「今天有什么待办」）→ 便宜快速模型（如 Gemini Flash）
+        复杂（如「帮我分析这份竞品报告」）→ 高性能模型（如 Claude/GPT-4）
+</code></pre></div>
 
-<h2>浏览器自动化能力</h2>
-<p>OpenClaw 通过其插件生态和 Bash 工具实现了强大的浏览器自动化能力。社区提供两大主流技能：</p>
-<ul>
-  <li><strong>agent-browser</strong>：基于 Rust 开发的浏览器控制 CLI，快速轻量</li>
-  <li><strong>browser-automation</strong>：基于 Node.js + Playwright 的完整浏览器自动化方案</li>
-</ul>
-<p>这两者都能让 AI 像人一样打开网页、点击按钮、填写表单、截取屏幕截图。区别在于 agent-browser 更轻量快速（适合简单操作），browser-automation 更全面稳定（适合复杂流程）。</p>
-
-<h2>社区生态：全民"养虾"</h2>
-<p>国内技术圈掀起了"全民养虾"（OpenClaw 的 Logo 是一只龙虾）的文化浪潮：</p>
-<ul>
-  <li><strong>ClawHub 插件市场</strong>：超过 13,729 个扩展插件</li>
-  <li><strong>一键部署</strong>：阿里云、腾讯云、火山引擎均提供官方镜像</li>
-  <li><strong>零代码部署</strong>：甚至可通过字节跳动的"扣子编程"实现两步免服务器部署</li>
-</ul>
-
-<h2>与同类框架对比</h2>
+<h3>与 Obsidian 的双向同步</h3>
+<p>记忆不仅存在 SQLite 数据库，还会以 Markdown 格式同步到你的 Obsidian Vault 里。你可以在 Obsidian 里：查看 AI 记住了哪些信息、手动修正错误内容、在笔记间建立 <code>[[wikilinks]]</code> 形成知识网络、甚至把整份记忆导出到其他 Markdown 工具。这是对「黑盒记忆」的彻底颠覆——<strong>你的 AI 记住了什么，你一目了然，不满意还能自己改</strong>。</p>
+<h3>一句话总结</h3>
+<blockquote>
+<p>OpenHuman 是<strong>唯一能通过桌面 GUI + 自动同步 + 结构化记忆树实现「开箱即用型」个人 AI 助理的项目</strong>。它的门槛最低、记忆系统最强、对 token 成本控制最好。适合绝大多数用户，尤其是知识工作者。</p>
+</blockquote>
+<hr />
+<h2>系统对比：关键维度一览</h2>
 <table>
-  <tr><th>框架</th><th>定位</th><th>目标用户</th><th>浏览器自动化</th></tr>
-  <tr><td>OpenClaw</td><td>个人 AI 操作系统</td><td>开发者和高级用户</td><td>✅ 原生支持</td></tr>
-  <tr><td>LangChain</td><td>LLM 应用开发框架</td><td>AI 应用开发者</td><td>需手动集成</td></tr>
-  <tr><td>AutoGPT</td><td>自主任务代理</td><td>研究人员和极客</td><td>早期支持</td></tr>
-  <tr><td>CrewAI</td><td>多代理协作框架</td><td>多角色场景开发者</td><td>需手动集成</td></tr>
+<thead>
+<tr>
+<th>维度</th>
+<th>OpenClaw</th>
+<th>Hermes Agent</th>
+<th>OpenHuman</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>所处层级</strong></td>
+<td>🟢 环境层（网关/工具）</td>
+<td>🔵 执行层（学习/编排）</td>
+<td>🟠 记忆层（上下文/持久化）</td>
+</tr>
+<tr>
+<td><strong>核心语言</strong></td>
+<td>Rust</td>
+<td>Python</td>
+<td>Rust（Tauri）</td>
+</tr>
+<tr>
+<td><strong>用户界面</strong></td>
+<td>CLI + Web Dashboard</td>
+<td>CLI / TUI</td>
+<td><strong>原生桌面 GUI</strong></td>
+</tr>
+<tr>
+<td><strong>记忆方式</strong></td>
+<td>插件级会话记忆</td>
+<td>FTS5 + LLM 总结闭环</td>
+<td><strong>Memory Tree 三层结构</strong></td>
+</tr>
+<tr>
+<td><strong>记忆是否用户可见</strong></td>
+<td>❌ 不可见</td>
+<td>❌ 不可见</td>
+<td>✅ Obsidian Markdown 可见可编辑</td>
+</tr>
+<tr>
+<td><strong>第三方集成</strong></td>
+<td>20+ 消息平台</td>
+<td>多消息平台 + CLI</td>
+<td><strong>118+ 服务一键 OAuth</strong></td>
+</tr>
+<tr>
+<td><strong>模型路由</strong></td>
+<td>手动配置</td>
+<td>多 Provider 支持</td>
+<td><strong>自动路由（隐私/成本/复杂度）</strong></td>
+</tr>
+<tr>
+<td><strong>Token 优化</strong></td>
+<td>无</td>
+<td>研究级轨迹压缩</td>
+<td><strong>TokenJuice（最高省 80%）</strong></td>
+</tr>
+<tr>
+<td><strong>浏览器控制</strong></td>
+<td>✅ CDP 快照-动作模式</td>
+<td>✅ 完整浏览器自动化</td>
+<td>✅ 内置浏览器工具</td>
+</tr>
+<tr>
+<td><strong>执行沙箱</strong></td>
+<td>Docker</td>
+<td>Docker / SSH / Modal</td>
+<td>本地优先 + 权限边界</td>
+</tr>
+<tr>
+<td><strong>学习成本</strong></td>
+<td><strong>高</strong>（需 CLI 配置）</td>
+<td><strong>中</strong></td>
+<td><strong>低</strong>（桌面安装包）</td>
+</tr>
+<tr>
+<td><strong>GitHub Stars</strong></td>
+<td>~37.5 万</td>
+<td>参见官方仓库</td>
+<td>~2.8 万</td>
+</tr>
+<tr>
+<td><strong>开源协议</strong></td>
+<td>MIT</td>
+<td>MIT</td>
+<td>GPL-3.0</td>
+</tr>
+</tbody>
 </table>
-
-<h2>潜在风险与警示</h2>
-<p>OpenClaw 的火爆也带来了显著的隐患，如果你要部署使用，请一定注意：</p>
+<hr />
+<h2>决策指南</h2>
+<h3>按痛点排序</h3>
 <ol>
-  <li><strong>天价 API 账单</strong>：AI 陷入逻辑死循环后整夜疯狂调用 API，已有用户遭遇 $1,100 账单。<strong>建议：锁死每日消费上限</strong></li>
-  <li><strong>安全暴雷</strong>：超 3 万台公网部署的实例未配置任何认证，任何人都能通过网关操控服务器。最新版已强制要求配置认证</li>
-  <li><strong>供应链投毒</strong>：高峰期近 20% 的 ClawHub 插件包含恶意代码，可窃取文件、篡改 AI 人格。<strong>建议：安装前查阅插件源码</strong></li>
+<li>
+<p><strong>「我想在微信/Telegram/Slack 里都能用同一个 AI，它还能自己操作浏览器」</strong>
+   → <strong>OpenClaw</strong>。Gateway 架构 + CDP 浏览器控制是目前唯一能同时做到这两点的方案。</p>
+</li>
+<li>
+<p><strong>「AI 每次帮我干完活就忘，同样的事情下次还得重教」</strong>
+   → <strong>Hermes Agent</strong>。它的闭环学习系统是目前唯一能自动从经验中创建技能并复用的实现。</p>
+</li>
+<li>
+<p><strong>「AI 从来不认识我，我想让它自己去读我的邮件、笔记、日历，然后自然地在后续对话中理解我」</strong>
+   → <strong>OpenHuman</strong>。Memory Tree + 118 服务自动同步 + Obsidian 同步，记忆能力在三个中最强且唯一用户可见可控。</p>
+</li>
+<li>
+<p><strong>「我不想碰命令行，装完就想用」</strong>
+   → <strong>OpenHuman</strong>。它是唯一有桌面安装包（DMG/EXE）的，双击即装。</p>
+</li>
 </ol>
-
-<h2>小结</h2>
-<p>OpenClaw 的爆发不是偶然。它在"AI 究竟能为我做什么"这个终极问题上，给出了一个极具吸引力的答案——让 AI 从"聊天顾问"升级为"数字打工人"，接入你的日常工具链，真正帮你做事。尽管存在安全和成本隐患，但它所代表的<strong>自托管 AI Agent</strong> 方向，正在重新定义我们与 AI 的交互方式。</p>
-
+<h3>可以组合</h3>
+<p>三者在设计上不冲突，甚至可以搭档：</p>
+<ul>
+<li><strong>OpenClaw（网关入口）+ Hermes（执行引擎）</strong>：你在微信发消息 → OpenClaw 接收 → 转给 Hermes 执行复杂多步任务 → 结果返回微信</li>
+<li><strong>OpenHuman（记忆底座）+ Hermes（行动引擎）</strong>：OpenHuman 通过自动同步构建你的长期记忆 → Hermes 基于记忆内容执行代码/浏览器操作</li>
+<li>注意：同时运行时必须各自使用独立的工作目录、独立的浏览器配置和独立的 OAuth 授权</li>
+</ul>
+<hr />
+<h2>三个你必须懂的技术概念</h2>
+<p>（如果读到这里你已经理解了，可跳过本节）</p>
+<ul>
+<li><strong>CDP（Chrome DevTools Protocol）</strong>：浏览器开放给外部程序的控制协议。外部工具通过 WebSocket 连接 Chrome，可以远程做打开页面、点击、截图等操作。它是所有浏览器自动化的底层依赖。</li>
+<li><strong>OAuth（开放授权协议）</strong>：你常见到的「用 Google 账号登录」就是 OAuth。应用可以在不拿到你密码的前提下获得受限权限（比如只读你的邮件），你随时可以收回授权。</li>
+<li><strong>Token（大模型计费单位）</strong>：1 token ≈ 0.5 个中文词。每次对话的输入 + 输出消耗一定数量的 token，乘以单价就是费用。TokenJuice 做的就是在不影响语义的前提下压缩内容，省 token = 省钱。</li>
+</ul>
+<hr />
+<blockquote>
+<p>本文基于 2026 年 5 月公开信息整理。开源项目迭代极快，具体数据请以各项目官方仓库为准。</p>
+</blockquote>
       </div>
       <div class="article-footer">
-        <a href="index.html" class="article-back">← 返回首页</a>
+        <a href="index.html" class="article-back">&larr; 返回首页</a>
       </div>
     </div>
   </div>
